@@ -1,0 +1,434 @@
+{
+  "evaluatedAt": "2026-09-05T05:03:25.425Z",
+  "generatorSha256": "777af446c694cfa67d18ea5b3eda7a5bf3e9e817081288c8f7835431b7ec0a7e",
+  "sampleSize": 30,
+  "rule": "Unweighted frequency >=30%; wins weighted 1.5x in overlap and timing; experiments excluded",
+  "reports": [
+    {
+      "name": "Afterburn engine",
+      "agreement": 31,
+      "overlap": 0.14448292924294906,
+      "order": 0.7,
+      "shared": 5,
+      "coreCount": 24,
+      "pairs": 10
+    },
+    {
+      "name": "Bullet pressure",
+      "agreement": 34,
+      "overlap": 0.06316254416961131,
+      "order": 1,
+      "shared": 2,
+      "coreCount": 24,
+      "pairs": 1
+    }
+  ],
+  "core": [
+    {
+      "itemId": 7409189,
+      "frequency": 1,
+      "weightedFrequency": 1,
+      "meanTime": 607.8518518518518,
+      "core": true
+    },
+    {
+      "itemId": 2081037738,
+      "frequency": 1,
+      "weightedFrequency": 1,
+      "meanTime": 656.2716049382716,
+      "core": true
+    },
+    {
+      "itemId": 2603935618,
+      "frequency": 1,
+      "weightedFrequency": 1,
+      "meanTime": 499.7901234567901,
+      "core": true
+    },
+    {
+      "itemId": 968099481,
+      "frequency": 0.9666666666666667,
+      "weightedFrequency": 0.9753086419753086,
+      "meanTime": 223.39240506329114,
+      "core": true
+    },
+    {
+      "itemId": 876563814,
+      "frequency": 0.8,
+      "weightedFrequency": 0.8148148148148148,
+      "meanTime": 710.8636363636364,
+      "core": true
+    },
+    {
+      "itemId": 1672893796,
+      "frequency": 0.8,
+      "weightedFrequency": 0.8148148148148148,
+      "meanTime": 339.3030303030303,
+      "core": true
+    },
+    {
+      "itemId": 1925087134,
+      "frequency": 0.7666666666666667,
+      "weightedFrequency": 0.7901234567901234,
+      "meanTime": 457.09375,
+      "core": true
+    },
+    {
+      "itemId": 2010028405,
+      "frequency": 0.7666666666666667,
+      "weightedFrequency": 0.7901234567901234,
+      "meanTime": 98.09375,
+      "core": true
+    },
+    {
+      "itemId": 395867183,
+      "frequency": 0.7333333333333333,
+      "weightedFrequency": 0.7530864197530864,
+      "meanTime": 828.7377049180328,
+      "core": true
+    },
+    {
+      "itemId": 4053935515,
+      "frequency": 0.7,
+      "weightedFrequency": 0.7283950617283951,
+      "meanTime": 914.7627118644068,
+      "core": true
+    },
+    {
+      "itemId": 787198704,
+      "frequency": 0.6666666666666666,
+      "weightedFrequency": 0.6790123456790124,
+      "meanTime": 1282.2727272727273,
+      "core": true
+    },
+    {
+      "itemId": 3005970438,
+      "frequency": 0.6666666666666666,
+      "weightedFrequency": 0.6666666666666666,
+      "meanTime": 1539.2222222222222,
+      "core": true
+    },
+    {
+      "itemId": 805079544,
+      "frequency": 0.5666666666666667,
+      "weightedFrequency": 0.5925925925925926,
+      "meanTime": 690.4583333333334,
+      "core": true
+    },
+    {
+      "itemId": 2829638276,
+      "frequency": 0.5666666666666667,
+      "weightedFrequency": 0.5555555555555556,
+      "meanTime": 210.48888888888888,
+      "core": true
+    },
+    {
+      "itemId": 2417568017,
+      "frequency": 0.5333333333333333,
+      "weightedFrequency": 0.5432098765432098,
+      "meanTime": 1395.8863636363637,
+      "core": true
+    },
+    {
+      "itemId": 3776945997,
+      "frequency": 0.5,
+      "weightedFrequency": 0.5308641975308642,
+      "meanTime": 1128.953488372093,
+      "core": true
+    },
+    {
+      "itemId": 2717651715,
+      "frequency": 0.4666666666666667,
+      "weightedFrequency": 0.4691358024691358,
+      "meanTime": 1638,
+      "core": true
+    },
+    {
+      "itemId": 112198670,
+      "frequency": 0.36666666666666664,
+      "weightedFrequency": 0.37037037037037035,
+      "meanTime": 670.3333333333334,
+      "core": true
+    },
+    {
+      "itemId": 3270001687,
+      "frequency": 0.36666666666666664,
+      "weightedFrequency": 0.345679012345679,
+      "meanTime": 1371.107142857143,
+      "core": true
+    },
+    {
+      "itemId": 1144549437,
+      "frequency": 0.3333333333333333,
+      "weightedFrequency": 0.3333333333333333,
+      "meanTime": 1065.888888888889,
+      "core": true
+    },
+    {
+      "itemId": 1414025773,
+      "frequency": 0.3333333333333333,
+      "weightedFrequency": 0.32098765432098764,
+      "meanTime": 1218.9615384615386,
+      "core": true
+    },
+    {
+      "itemId": 3970837787,
+      "frequency": 0.3333333333333333,
+      "weightedFrequency": 0.30864197530864196,
+      "meanTime": 521.24,
+      "core": true
+    },
+    {
+      "itemId": 2951612397,
+      "frequency": 0.3,
+      "weightedFrequency": 0.2962962962962963,
+      "meanTime": 1161.5416666666667,
+      "core": true
+    },
+    {
+      "itemId": 3696726732,
+      "frequency": 0.3,
+      "weightedFrequency": 0.2716049382716049,
+      "meanTime": 1176.909090909091,
+      "core": true
+    },
+    {
+      "itemId": 2226497419,
+      "frequency": 0.26666666666666666,
+      "weightedFrequency": 0.25925925925925924,
+      "meanTime": 1186.142857142857,
+      "core": false
+    },
+    {
+      "itemId": 2163598980,
+      "frequency": 0.26666666666666666,
+      "weightedFrequency": 0.24691358024691357,
+      "meanTime": 1714.1,
+      "core": false
+    },
+    {
+      "itemId": 865846625,
+      "frequency": 0.2,
+      "weightedFrequency": 0.19753086419753085,
+      "meanTime": 2020.8125,
+      "core": false
+    },
+    {
+      "itemId": 3633614685,
+      "frequency": 0.2,
+      "weightedFrequency": 0.19753086419753085,
+      "meanTime": 633.625,
+      "core": false
+    },
+    {
+      "itemId": 3731635960,
+      "frequency": 0.2,
+      "weightedFrequency": 0.1728395061728395,
+      "meanTime": 1228.4285714285713,
+      "core": false
+    },
+    {
+      "itemId": 3862866912,
+      "frequency": 0.16666666666666666,
+      "weightedFrequency": 0.16049382716049382,
+      "meanTime": 109.23076923076923,
+      "core": false
+    },
+    {
+      "itemId": 4104549924,
+      "frequency": 0.16666666666666666,
+      "weightedFrequency": 0.16049382716049382,
+      "meanTime": 880.9230769230769,
+      "core": false
+    },
+    {
+      "itemId": 1047818222,
+      "frequency": 0.13333333333333333,
+      "weightedFrequency": 0.14814814814814814,
+      "meanTime": 1384.5,
+      "core": false
+    },
+    {
+      "itemId": 1371725689,
+      "frequency": 0.13333333333333333,
+      "weightedFrequency": 0.14814814814814814,
+      "meanTime": 1901,
+      "core": false
+    },
+    {
+      "itemId": 1548066885,
+      "frequency": 0.16666666666666666,
+      "weightedFrequency": 0.13580246913580246,
+      "meanTime": 422,
+      "core": false
+    },
+    {
+      "itemId": 2519598785,
+      "frequency": 0.13333333333333333,
+      "weightedFrequency": 0.13580246913580246,
+      "meanTime": 2253.4545454545455,
+      "core": false
+    },
+    {
+      "itemId": 84321454,
+      "frequency": 0.13333333333333333,
+      "weightedFrequency": 0.12345679012345678,
+      "meanTime": 1212.4,
+      "core": false
+    },
+    {
+      "itemId": 668299740,
+      "frequency": 0.13333333333333333,
+      "weightedFrequency": 0.12345679012345678,
+      "meanTime": 430.5,
+      "core": false
+    },
+    {
+      "itemId": 1813726886,
+      "frequency": 0.13333333333333333,
+      "weightedFrequency": 0.12345679012345678,
+      "meanTime": 833,
+      "core": false
+    },
+    {
+      "itemId": 2356412290,
+      "frequency": 0.13333333333333333,
+      "weightedFrequency": 0.12345679012345678,
+      "meanTime": 1023.1,
+      "core": false
+    },
+    {
+      "itemId": 2480592370,
+      "frequency": 0.13333333333333333,
+      "weightedFrequency": 0.12345679012345678,
+      "meanTime": 1829.9,
+      "core": false
+    },
+    {
+      "itemId": 1797283378,
+      "frequency": 0.1,
+      "weightedFrequency": 0.1111111111111111,
+      "meanTime": 1847.6666666666667,
+      "core": false
+    },
+    {
+      "itemId": 1955841979,
+      "frequency": 0.1,
+      "weightedFrequency": 0.1111111111111111,
+      "meanTime": 2066.6666666666665,
+      "core": false
+    },
+    {
+      "itemId": 3357231760,
+      "frequency": 0.1,
+      "weightedFrequency": 0.1111111111111111,
+      "meanTime": 2025,
+      "core": false
+    },
+    {
+      "itemId": 2463960640,
+      "frequency": 0.1,
+      "weightedFrequency": 0.08641975308641975,
+      "meanTime": 1394.142857142857,
+      "core": false
+    },
+    {
+      "itemId": 2533252781,
+      "frequency": 0.06666666666666667,
+      "weightedFrequency": 0.07407407407407407,
+      "meanTime": 2396.5,
+      "core": false
+    },
+    {
+      "itemId": 3491236900,
+      "frequency": 0.06666666666666667,
+      "weightedFrequency": 0.07407407407407407,
+      "meanTime": 1763.5,
+      "core": false
+    },
+    {
+      "itemId": 4075861416,
+      "frequency": 0.06666666666666667,
+      "weightedFrequency": 0.07407407407407407,
+      "meanTime": 1712.5,
+      "core": false
+    },
+    {
+      "itemId": 1644605047,
+      "frequency": 0.06666666666666667,
+      "weightedFrequency": 0.06172839506172839,
+      "meanTime": 662.2,
+      "core": false
+    },
+    {
+      "itemId": 2059712766,
+      "frequency": 0.06666666666666667,
+      "weightedFrequency": 0.06172839506172839,
+      "meanTime": 881.2,
+      "core": false
+    },
+    {
+      "itemId": 3399065363,
+      "frequency": 0.06666666666666667,
+      "weightedFrequency": 0.06172839506172839,
+      "meanTime": 554.2,
+      "core": false
+    },
+    {
+      "itemId": 989206714,
+      "frequency": 0.06666666666666667,
+      "weightedFrequency": 0.04938271604938271,
+      "meanTime": 1107.5,
+      "core": false
+    },
+    {
+      "itemId": 499683006,
+      "frequency": 0.03333333333333333,
+      "weightedFrequency": 0.037037037037037035,
+      "meanTime": 1838,
+      "core": false
+    },
+    {
+      "itemId": 951866250,
+      "frequency": 0.03333333333333333,
+      "weightedFrequency": 0.037037037037037035,
+      "meanTime": 1542,
+      "core": false
+    },
+    {
+      "itemId": 2617435668,
+      "frequency": 0.03333333333333333,
+      "weightedFrequency": 0.037037037037037035,
+      "meanTime": 2395,
+      "core": false
+    },
+    {
+      "itemId": 3074274290,
+      "frequency": 0.03333333333333333,
+      "weightedFrequency": 0.037037037037037035,
+      "meanTime": 386,
+      "core": false
+    },
+    {
+      "itemId": 3140772621,
+      "frequency": 0.03333333333333333,
+      "weightedFrequency": 0.037037037037037035,
+      "meanTime": 1934,
+      "core": false
+    },
+    {
+      "itemId": 865958998,
+      "frequency": 0.03333333333333333,
+      "weightedFrequency": 0.024691358024691357,
+      "meanTime": 1063,
+      "core": false
+    },
+    {
+      "itemId": 4139877411,
+      "frequency": 0.03333333333333333,
+      "weightedFrequency": 0.024691358024691357,
+      "meanTime": 906,
+      "core": false
+    }
+  ]
+}

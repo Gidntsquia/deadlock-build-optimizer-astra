@@ -1,0 +1,690 @@
+[
+  {
+    "id": "spirit",
+    "name": "Afterburn engine",
+    "subtitle": "Sustained spirit damage & survivability",
+    "focus": "spirit",
+    "items": [
+      {
+        "itemId": 968099481,
+        "phase": "Early",
+        "cost": 800,
+        "total": 800,
+        "score": 0.5240349520657228,
+        "winRate": 0.4908572859916087,
+        "usage": 0.7812558636612089,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 1710079648,
+        "phase": "Early",
+        "cost": 800,
+        "total": 1600,
+        "score": 0.6012931926896277,
+        "winRate": 0.47141782625047013,
+        "usage": 0.04297706747595389,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · active utility"
+      },
+      {
+        "itemId": 3776945997,
+        "phase": "Early",
+        "cost": 800,
+        "total": 2400,
+        "score": 0.44645103552276577,
+        "winRate": 0.5094438176423886,
+        "usage": 0.3900568622172186,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 668299740,
+        "phase": "Early",
+        "cost": 800,
+        "total": 3200,
+        "score": 0.4543004576139815,
+        "winRate": 0.4867992727351907,
+        "usage": 0.7489251654062344,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 1548066885,
+        "phase": "Early",
+        "cost": 800,
+        "total": 4000,
+        "score": 0.4155594976031863,
+        "winRate": 0.49119509197384864,
+        "usage": 0.7894711079566313,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 1925087134,
+        "phase": "Mid",
+        "cost": 1600,
+        "total": 5600,
+        "score": 0.7091959835300251,
+        "winRate": 0.5103607503607503,
+        "usage": 0.14093182244629907,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 3970837787,
+        "phase": "Mid",
+        "cost": 1600,
+        "total": 7200,
+        "score": 0.5634879637810831,
+        "winRate": 0.5010568195946786,
+        "usage": 0.13082389028936914,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 7409189,
+        "phase": "Mid",
+        "cost": 800,
+        "total": 8000,
+        "score": 0.6461953823841812,
+        "winRate": 0.49110814371998834,
+        "usage": 0.9221224210088352,
+        "upgradesFrom": [
+          968099481
+        ],
+        "sell": [],
+        "reason": "Build focus · passive value · component upgrade"
+      },
+      {
+        "itemId": 2739107182,
+        "phase": "Mid",
+        "cost": 2400,
+        "total": 10400,
+        "score": 0.5634242166579987,
+        "winRate": 0.4918075422626788,
+        "usage": 0.18780032143061096,
+        "upgradesFrom": [
+          668299740
+        ],
+        "sell": [],
+        "reason": "Balanced support · passive value · component upgrade"
+      },
+      {
+        "itemId": 4104549924,
+        "phase": "Mid",
+        "cost": 1600,
+        "total": 12000,
+        "score": 0.5789152577567197,
+        "winRate": 0.48501387604070306,
+        "usage": 0.6169183452034231,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 2519598785,
+        "phase": "Late",
+        "cost": 4800,
+        "total": 16800,
+        "score": 0.6836672964614502,
+        "winRate": 0.5322367815386504,
+        "usage": 0.5312905357448787,
+        "upgradesFrom": [
+          7409189
+        ],
+        "sell": [],
+        "reason": "Build focus · passive value · component upgrade"
+      },
+      {
+        "itemId": 1797283378,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 23200,
+        "score": 0.7099117928999873,
+        "winRate": 0.5560078150439596,
+        "usage": 0.09980665214518221,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · active utility"
+      },
+      {
+        "itemId": 3919289022,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 29600,
+        "score": 0.57778945718767,
+        "winRate": 0.5573209670062338,
+        "usage": 0.10690423162583519,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 2226497419,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 36000,
+        "score": 0.8019212476036336,
+        "winRate": 0.5256164558579277,
+        "usage": 0.6381295022720412,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 865846625,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 42400,
+        "score": 0.5871591720352292,
+        "winRate": 0.5327372571106731,
+        "usage": 0.23134845851995073,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      }
+    ],
+    "abilityOrder": [
+      {
+        "abilityId": 1593133799,
+        "name": "Afterburn",
+        "slot": 3,
+        "tier": 0,
+        "level": 1,
+        "souls": 0,
+        "ap": 0
+      },
+      {
+        "abilityId": 1593133799,
+        "name": "Afterburn",
+        "slot": 3,
+        "tier": 1,
+        "level": 2,
+        "souls": 200,
+        "ap": 1
+      },
+      {
+        "abilityId": 3516947824,
+        "name": "Flame Dash",
+        "slot": 2,
+        "tier": 0,
+        "level": 3,
+        "souls": 500,
+        "ap": 0
+      },
+      {
+        "abilityId": 3516947824,
+        "name": "Flame Dash",
+        "slot": 2,
+        "tier": 1,
+        "level": 4,
+        "souls": 900,
+        "ap": 1
+      },
+      {
+        "abilityId": 491391007,
+        "name": "Napalm",
+        "slot": 1,
+        "tier": 0,
+        "level": 5,
+        "souls": 1400,
+        "ap": 0
+      },
+      {
+        "abilityId": 1593133799,
+        "name": "Afterburn",
+        "slot": 3,
+        "tier": 2,
+        "level": 7,
+        "souls": 2600,
+        "ap": 2
+      },
+      {
+        "abilityId": 1142270357,
+        "name": "Concussive Combustion",
+        "slot": 4,
+        "tier": 0,
+        "level": 8,
+        "souls": 3200,
+        "ap": 0
+      },
+      {
+        "abilityId": 1593133799,
+        "name": "Afterburn",
+        "slot": 3,
+        "tier": 3,
+        "level": 13,
+        "souls": 6800,
+        "ap": 5
+      },
+      {
+        "abilityId": 491391007,
+        "name": "Napalm",
+        "slot": 1,
+        "tier": 1,
+        "level": 14,
+        "souls": 7600,
+        "ap": 1
+      },
+      {
+        "abilityId": 3516947824,
+        "name": "Flame Dash",
+        "slot": 2,
+        "tier": 2,
+        "level": 16,
+        "souls": 9200,
+        "ap": 2
+      },
+      {
+        "abilityId": 491391007,
+        "name": "Napalm",
+        "slot": 1,
+        "tier": 2,
+        "level": 18,
+        "souls": 11000,
+        "ap": 2
+      },
+      {
+        "abilityId": 491391007,
+        "name": "Napalm",
+        "slot": 1,
+        "tier": 3,
+        "level": 23,
+        "souls": 16100,
+        "ap": 5
+      },
+      {
+        "abilityId": 3516947824,
+        "name": "Flame Dash",
+        "slot": 2,
+        "tier": 3,
+        "level": 28,
+        "souls": 24600,
+        "ap": 5
+      },
+      {
+        "abilityId": 1142270357,
+        "name": "Concussive Combustion",
+        "slot": 4,
+        "tier": 1,
+        "level": 29,
+        "souls": 26900,
+        "ap": 1
+      },
+      {
+        "abilityId": 1142270357,
+        "name": "Concussive Combustion",
+        "slot": 4,
+        "tier": 2,
+        "level": 31,
+        "souls": 32100,
+        "ap": 2
+      },
+      {
+        "abilityId": 1142270357,
+        "name": "Concussive Combustion",
+        "slot": 4,
+        "tier": 3,
+        "level": 36,
+        "souls": 48600,
+        "ap": 5
+      }
+    ],
+    "abilityEvidence": 6704,
+    "abilityFallback": false,
+    "total": 42400,
+    "kitNote": "Bullet buildup in the kit makes fire rate valuable alongside spirit scaling."
+  },
+  {
+    "id": "weapon",
+    "name": "Bullet pressure",
+    "subtitle": "Weapon damage & sustained fire",
+    "focus": "weapon",
+    "items": [
+      {
+        "itemId": 668299740,
+        "phase": "Early",
+        "cost": 800,
+        "total": 800,
+        "score": 0.5263323893558424,
+        "winRate": 0.4867992727351907,
+        "usage": 0.7489251654062344,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 1710079648,
+        "phase": "Early",
+        "cost": 800,
+        "total": 1600,
+        "score": 0.6004669571085294,
+        "winRate": 0.47141782625047013,
+        "usage": 0.04297706747595389,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · active utility"
+      },
+      {
+        "itemId": 1548066885,
+        "phase": "Early",
+        "cost": 800,
+        "total": 2400,
+        "score": 0.4771569494868791,
+        "winRate": 0.49119509197384864,
+        "usage": 0.7894711079566313,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 968099481,
+        "phase": "Early",
+        "cost": 800,
+        "total": 3200,
+        "score": 0.4312116639606987,
+        "winRate": 0.4908572859916087,
+        "usage": 0.7812558636612089,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 2922054143,
+        "phase": "Early",
+        "cost": 800,
+        "total": 4000,
+        "score": 0.4145414280274658,
+        "winRate": 0.3737596471885336,
+        "usage": 0.006991523695309887,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · active utility"
+      },
+      {
+        "itemId": 4104549924,
+        "phase": "Mid",
+        "cost": 800,
+        "total": 4800,
+        "score": 0.6205917889907844,
+        "winRate": 0.48501387604070306,
+        "usage": 0.6169183452034231,
+        "upgradesFrom": [
+          668299740
+        ],
+        "sell": [],
+        "reason": "Build focus · passive value · component upgrade"
+      },
+      {
+        "itemId": 2956256701,
+        "phase": "Mid",
+        "cost": 2400,
+        "total": 7200,
+        "score": 0.5232665640596352,
+        "winRate": 0.5,
+        "usage": 0.0007015998107312138,
+        "upgradesFrom": [
+          1710079648
+        ],
+        "sell": [],
+        "reason": "Balanced support · active utility · component upgrade"
+      },
+      {
+        "itemId": 2739107182,
+        "phase": "Mid",
+        "cost": 3200,
+        "total": 10400,
+        "score": 0.6092299108706504,
+        "winRate": 0.4918075422626788,
+        "usage": 0.18780032143061096,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 1925087134,
+        "phase": "Mid",
+        "cost": 1600,
+        "total": 12000,
+        "score": 0.6862444832883665,
+        "winRate": 0.5103607503607503,
+        "usage": 0.14093182244629907,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 3331811235,
+        "phase": "Mid",
+        "cost": 1600,
+        "total": 13600,
+        "score": 0.576350500498849,
+        "winRate": 0.4946236559139785,
+        "usage": 0.001868213449505209,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 2226497419,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 20000,
+        "score": 0.7540157556503371,
+        "winRate": 0.5256164558579277,
+        "usage": 0.6381295022720412,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 1250307611,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 26400,
+        "score": 0.6331035840580166,
+        "winRate": 0.5328423267698783,
+        "usage": 0.10814426850061594,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 2480592370,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 32800,
+        "score": 0.6251702612870985,
+        "winRate": 0.5287480116648993,
+        "usage": 0.49195199751992624,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 3919289022,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 39200,
+        "score": 0.5899960195610272,
+        "winRate": 0.5573209670062338,
+        "usage": 0.10690423162583519,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · passive value"
+      },
+      {
+        "itemId": 1797283378,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 45600,
+        "score": 0.5930908942496415,
+        "winRate": 0.5560078150439596,
+        "usage": 0.09980665214518221,
+        "upgradesFrom": [],
+        "sell": [
+          968099481
+        ],
+        "reason": "Balanced support · active utility"
+      }
+    ],
+    "abilityOrder": [
+      {
+        "abilityId": 1593133799,
+        "name": "Afterburn",
+        "slot": 3,
+        "tier": 0,
+        "level": 1,
+        "souls": 0,
+        "ap": 0
+      },
+      {
+        "abilityId": 1593133799,
+        "name": "Afterburn",
+        "slot": 3,
+        "tier": 1,
+        "level": 2,
+        "souls": 200,
+        "ap": 1
+      },
+      {
+        "abilityId": 3516947824,
+        "name": "Flame Dash",
+        "slot": 2,
+        "tier": 0,
+        "level": 3,
+        "souls": 500,
+        "ap": 0
+      },
+      {
+        "abilityId": 3516947824,
+        "name": "Flame Dash",
+        "slot": 2,
+        "tier": 1,
+        "level": 4,
+        "souls": 900,
+        "ap": 1
+      },
+      {
+        "abilityId": 491391007,
+        "name": "Napalm",
+        "slot": 1,
+        "tier": 0,
+        "level": 5,
+        "souls": 1400,
+        "ap": 0
+      },
+      {
+        "abilityId": 1593133799,
+        "name": "Afterburn",
+        "slot": 3,
+        "tier": 2,
+        "level": 7,
+        "souls": 2600,
+        "ap": 2
+      },
+      {
+        "abilityId": 1142270357,
+        "name": "Concussive Combustion",
+        "slot": 4,
+        "tier": 0,
+        "level": 8,
+        "souls": 3200,
+        "ap": 0
+      },
+      {
+        "abilityId": 1593133799,
+        "name": "Afterburn",
+        "slot": 3,
+        "tier": 3,
+        "level": 13,
+        "souls": 6800,
+        "ap": 5
+      },
+      {
+        "abilityId": 491391007,
+        "name": "Napalm",
+        "slot": 1,
+        "tier": 1,
+        "level": 14,
+        "souls": 7600,
+        "ap": 1
+      },
+      {
+        "abilityId": 3516947824,
+        "name": "Flame Dash",
+        "slot": 2,
+        "tier": 2,
+        "level": 16,
+        "souls": 9200,
+        "ap": 2
+      },
+      {
+        "abilityId": 491391007,
+        "name": "Napalm",
+        "slot": 1,
+        "tier": 2,
+        "level": 18,
+        "souls": 11000,
+        "ap": 2
+      },
+      {
+        "abilityId": 491391007,
+        "name": "Napalm",
+        "slot": 1,
+        "tier": 3,
+        "level": 23,
+        "souls": 16100,
+        "ap": 5
+      },
+      {
+        "abilityId": 3516947824,
+        "name": "Flame Dash",
+        "slot": 2,
+        "tier": 3,
+        "level": 28,
+        "souls": 24600,
+        "ap": 5
+      },
+      {
+        "abilityId": 1142270357,
+        "name": "Concussive Combustion",
+        "slot": 4,
+        "tier": 1,
+        "level": 29,
+        "souls": 26900,
+        "ap": 1
+      },
+      {
+        "abilityId": 1142270357,
+        "name": "Concussive Combustion",
+        "slot": 4,
+        "tier": 2,
+        "level": 31,
+        "souls": 32100,
+        "ap": 2
+      },
+      {
+        "abilityId": 1142270357,
+        "name": "Concussive Combustion",
+        "slot": 4,
+        "tier": 3,
+        "level": 36,
+        "souls": 48600,
+        "ap": 5
+      }
+    ],
+    "abilityEvidence": 6704,
+    "abilityFallback": false,
+    "total": 45600,
+    "kitNote": "Bullet buildup in the kit makes fire rate valuable alongside spirit scaling."
+  }
+]

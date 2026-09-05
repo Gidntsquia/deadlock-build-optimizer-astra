@@ -1,0 +1,101 @@
+
+> deadlock-build-optimizer@1.0.0 fetch-data
+> node scripts/fetch-data.mjs
+
+Catalog: 251 items, 173 shopable; 38 active heroes.
+Analytics Infernus: 156 items, 126 orders, 11127 pairs
+Analytics Seven: 155 items, 116 orders, 10720 pairs
+Analytics Vindicta: 153 items, 69 orders, 10669 pairs
+Analytics Lady Geist: 154 items, 68 orders, 9670 pairs
+Analytics Abrams: 149 items, 75 orders, 10059 pairs
+Analytics Wraith: 149 items, 129 orders, 9636 pairs
+Analytics McGinnis: 154 items, 49 orders, 11439 pairs
+Analytics Dynamo: 156 items, 82 orders, 10493 pairs
+Analytics Paradox: 155 items, 92 orders, 11005 pairs
+Analytics Kelvin: 149 items, 59 orders, 8204 pairs
+Analytics Holliday: 155 items, 45 orders, 10076 pairs
+Analytics Haze: 156 items, 121 orders, 12722 pairs
+Analytics Grey Talon: 153 items, 53 orders, 8122 pairs
+Analytics Bebop: 153 items, 110 orders, 14651 pairs
+Analytics Mo & Krill: 150 items, 104 orders, 8503 pairs
+Analytics Calico: 152 items, 70 orders, 10232 pairs
+Analytics Shiv: 154 items, 76 orders, 9553 pairs
+Analytics Ivy: 156 items, 72 orders, 14670 pairs
+Analytics Warden: 153 items, 77 orders, 12265 pairs
+Analytics Yamato: 155 items, 76 orders, 10144 pairs
+Analytics Lash: 153 items, 102 orders, 9380 pairs
+Analytics Viscous: 156 items, 62 orders, 12161 pairs
+Analytics Pocket: 151 items, 85 orders, 8126 pairs
+Analytics Vyper: 155 items, 56 orders, 9149 pairs
+Analytics Mirage: 150 items, 55 orders, 7761 pairs
+Analytics Sinclair: 153 items, 37 orders, 9454 pairs
+Analytics Mina: 151 items, 101 orders, 8848 pairs
+Analytics Drifter: 152 items, 130 orders, 14568 pairs
+Analytics Venator: 156 items, 100 orders, 12529 pairs
+Analytics Victor: 156 items, 103 orders, 10890 pairs
+Analytics Paige: 156 items, 82 orders, 12832 pairs
+Analytics The Doorman: 156 items, 54 orders, 10906 pairs
+Analytics Billy: 156 items, 96 orders, 12502 pairs
+Analytics Apollo: 152 items, 58 orders, 9842 pairs
+Analytics Graves: 151 items, 103 orders, 13482 pairs
+Analytics Celeste: 155 items, 87 orders, 9891 pairs
+Analytics Rem: 156 items, 97 orders, 13906 pairs
+Analytics Silver: 153 items, 48 orders, 11808 pairs
+Validation metadata 1/30: 100198294
+Validation metadata 2/30: 99029240
+Validation metadata 3/30: 98056659
+Validation metadata 4/30: 97815294
+Validation metadata 5/30: 96896861
+Validation metadata 6/30: 93943163
+Validation metadata 7/30: 93797406
+Validation metadata 8/30: 93473807
+Validation metadata 9/30: 93137781
+Validation metadata 10/30: 92821118
+Validation metadata 11/30: 91994021
+Validation metadata 12/30: 91974437
+Validation metadata 13/30: 91819472
+Validation metadata 14/30: 91810327
+Validation metadata 15/30: 91635069
+Validation metadata 16/30: 90320926
+Validation metadata 17/30: 90313002
+Validation metadata 18/30: 89800366
+Validation metadata 19/30: 89788513
+Validation metadata 20/30: 89447773
+Validation metadata 21/30: 89437096
+Validation metadata 22/30: 89433525
+Validation metadata 23/30: 89431701
+Validation metadata 24/30: 89427985
+Validation metadata 25/30: 89260395
+Validation metadata 26/30: 85136416
+Validation metadata 27/30: 85128747
+Validation metadata 28/30: 84192987
+Validation metadata 29/30: 82987667
+Validation metadata 30/30: 80475978
+Images 0/363
+Images 40/363
+Images 80/363
+Images 120/363
+Images 160/363
+Images 200/363
+Images 240/363
+Images 280/363
+Images 320/363
+Images 360/363
+Snapshots complete. {
+  "fetchedAt": "2026-09-05T04:56:46.226Z",
+  "aggregateWindow": {
+    "start": 1787961600,
+    "endExclusive": 1788566400
+  },
+  "activeHeroes": 38,
+  "catalogItems": 251,
+  "shopableItems": 173,
+  "validationMatches": 30,
+  "personalMatches": 100,
+  "heldOutOverlap": 0,
+  "skipped": [],
+  "warnings": [
+    "Upstream exposes only 173 shopable items (251 total); the >=200 shopable acceptance criterion cannot truthfully pass."
+  ],
+  "sources": 512
+}

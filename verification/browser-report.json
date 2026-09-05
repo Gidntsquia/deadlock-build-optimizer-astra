@@ -1,0 +1,15 @@
+{
+  "testedAt": "2026-09-05T05:03:49.966Z",
+  "viewport": "390×844",
+  "productionBuild": true,
+  "externalNetwork": "blocked",
+  "externalRequests": [],
+  "consoleErrors": [],
+  "heroesTested": 38,
+  "buildsPerHero": 2,
+  "viewsPerBuild": 3,
+  "detailCardsVerified": 30,
+  "keyboardEscapeAndFocus": true,
+  "horizontalOverflow": false,
+  "tapTargetsAtLeast40px": true
+}
