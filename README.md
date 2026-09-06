@@ -42,7 +42,7 @@ unshare -Urn bash scripts/verify-offline.sh
 
 This creates a network namespace with **only loopback**, builds the app, runs the algorithm tests, and tests the served production app. It does not disconnect the host machine.
 
-## Verified acceptance results — September 5, 2026
+## Verified acceptance results — September 6, 2026
 
 **One upstream-dependent criterion is not met:** the API supplies **251 upgrade catalog entries, of which only 173 have `shopable: true`**. All 251 are retained exactly as supplied; retired items are never relabeled as purchasable. The requested minimum of 200 _shopable_ items cannot truthfully be reached with the current source. The test suite explicitly skips that numerical assertion with the actual counts, rather than reporting it as passed.
 
@@ -59,7 +59,7 @@ This creates a network namespace with **only loopback**, builds the app, runs th
 | 390×844 layout and ≥40px tap targets                                          | **Pass.** All hero/build/view combinations and 30 detail dialogs tested for horizontal overflow and target dimensions. Escape closes the dialog and restores focus. Desktop stays in a centered 680px column.                   |
 | Documented scoring and deterministic reruns                                   | **Pass.** Exact deep equality for repeated generation on all 38 heroes; per-hero SHA-256 build fingerprints saved. Fixed weights below.                                                                                         |
 
-Evidence is in `verification/`: `offline-verification.log`, `browser-report.json`, `build-hashes.json`, `generated-infernus.json`, `validation-report.json`, mobile screenshots for items/abilities/validation/detail, and a desktop screenshot. The algorithm suite has **9 passing tests and 1 explicitly skipped upstream constraint**, with no failures.
+Evidence is in `verification/`: `offline-verification.log`, `browser-report.json`, `build-hashes.json`, `generated-infernus.json`, `validation-report.json`, mobile screenshots for items/abilities/validation/detail, and a desktop screenshot. The algorithm suite has **10 passing tests and 1 explicitly skipped upstream constraint**, with no failures.
 
 ## Data pipeline and provenance
 
@@ -106,13 +106,15 @@ Stat feature scales are explicit: weapon damage /20; fire rate /15; spirit power
 
 Raw utility combines gun × gun affinity × (1.8 weapon-focus /0.6 spirit-focus), fire × fire affinity × (1.4 /1), spirit × spirit affinity × (0.5 /1.8), sustain, and 0.6×utility. Effect prose recognizes spirit/burn/damage-over-time versus weapon/bullet/fire-rate keywords. Thus Infernus's actual Afterburn buildup/refill properties, spirit scaling, weapon fire rate and growth all affect scoring without a hand-curated item list. This is a transparent heuristic optimizer, **not a proof of globally optimal play or a predicted win rate**. Item win rates have selection/survivorship bias; the prior dampens small samples but does not eliminate that bias.
 
+An optional Ascendant+ cohort (`min_average_badge=100`) uses the same aggregate time window and modes. It is selected only with at least 1,000 hero matches and 30 item rows; otherwise the full population is retained. Item, ability, pair, and denominator data always come from the same cohort. The UI identifies the chosen cohort and hero match count. `high-skill-hero-stats.json` preserves the expert denominators.
+
 ### Build legality and phases
 
-Each approach selects 15 unique purchases: five early (tier 1), five mid (tiers 2–3), five late (tiers 3–4). Each phase allocates two slots to its focus, one vitality slot, one opposite offensive slot, and one unrestricted slot. This is an a priori balanced-build constraint, ensuring meaningful gun/spirit alternatives rather than just renaming the same list.
+Each approach selects 15 unique purchases: five early (tier 1), five mid (tiers 2–3), five late (tiers 3–4). Each phase allocates two slots to its focus, one vitality slot, and two unrestricted slots. This is an a priori balanced-build constraint, ensuring meaningful gun/spirit alternatives rather than just renaming the same list.
 
-Only `shopable: true` assets qualify. Candidates with no item analytics get neutral 50% smoothed win rate and zero usage. Already-bought items, downgrade components of currently owned upgrades, and a fifth simultaneous active item are excluded. Owned components are consumed and credited against the upgrade's catalog cost. If no component was previously bought, the full catalog cost is charged. At a conservative 12 occupied slots, the cheapest remaining item is sold before adding a replacement; this instruction is displayed. This avoids assuming optional extra inventory capacity. The timeline is a **purchase plan**, not 15 items simultaneously equipped.
+Only `shopable: true` assets qualify. Candidates with at least 20 observed matches are preferred whenever any legal observed candidate exists. Unobserved candidates are a fallback only, with neutral 50% smoothed win rate and zero usage. Already-bought items, downgrade components of currently owned upgrades, and a fifth simultaneous active item are excluded. Owned components are consumed and credited against the upgrade's catalog cost. If no component was previously bought, the full catalog cost is charged. At a conservative 12 occupied slots, the cheapest remaining item is sold before adding a replacement; this instruction is displayed. This avoids assuming optional extra inventory capacity. The timeline is a **purchase plan**, not 15 items simultaneously equipped.
 
-Running totals sum actual purchase payments after component credits. Sale refunds are deliberately excluded, producing a conservative budget rather than patch-dependent refund assumptions. Investment scoring uses cumulative category spending and full candidate cost as a heuristic. It does not attempt to simulate every conditional effect, enemy composition, or match situation.
+Running totals sum actual purchase payments after component credits. Sale refunds are deliberately excluded, producing a conservative budget rather than patch-dependent refund assumptions. Investment scoring uses cumulative category spending and candidate payment after owned-component credit as a heuristic. It does not attempt to simulate every conditional effect, enemy composition, or match situation.
 
 ### Ability paths
 
@@ -128,7 +130,7 @@ An item is **core when it appears in ≥30% of sampled matches**, counting prese
 
 Overlap is weighted Jaccard: numerator = sum of weighted frequencies of shared core items; denominator = sum of weights of **all** core items + 1 for each non-core recommended item. Missing core and extra items are therefore both penalized. Retired core items remain in the denominator rather than disappearing to improve the score. Order agreement is the fraction of shared-item pairs whose build order agrees with their weighted mean purchase times. Tied times are omitted; fewer than two shared items yields N/A order and zero contribution.
 
-**Overall agreement = round(100 × (0.70 × overlap + 0.30 × order)).** This measures how well the generator did against one player's core; it is not build strength, a confidence interval, or predicted win probability. The delivered snapshot yields **31% Afterburn engine** and **34% Bullet pressure**. The sample includes older patches, is small, and comes from a single player. Low agreement is reported without tuning weights to raise it.
+**Overall agreement = round(100 × (0.70 × overlap + 0.30 × order)).** This measures how well the generator did against one player's core; it is not build strength, a confidence interval, or predicted win probability. The revised snapshot yields **35% Afterburn engine** (previously 31%) and **34% Bullet pressure** (unchanged). The single revision was declared in `verification/revision-plan.md` before evaluation, with fixed scoring weights and the same evaluator and sample. This is a reused test sample, not fresh independent generalization evidence. Infernus uses the all-skill fallback because its expert cohort is below the evidence threshold; its measured improvement comes from the aggregate-only candidate/legality changes, not an expert-cohort switch. The sample includes older patches, is small, and comes from a single player. Low agreement is reported without tuning weights to raise it.
 
 Non-Infernus builds show “Core check: N/A” and an Infernus-only validation explanation, rather than applying another hero's reference set.
 
@@ -136,7 +138,7 @@ Non-Infernus builds show “Core check: N/A” and an Infernus-only validation e
 
 - Account `267836488` contributes at most 100 most recent standard ranked/unranked, non-abandoned matches of at least ten minutes. Their median duration and median final net worth are displayed. Purchases whose cumulative budget exceeds that median net worth get a “Stretch” badge. This annotates builds and does not feed the generator or held-out score. Empty history gets an explicit general-guide message. Final net worth is a pacing proxy, not identical to lifetime purchase spending.
 - Infernus defaults to the spirit approach. Current asset names take precedence over historical familiarity: Napalm is not hardcoded as Catalyst.
-- A single centered column, dark shop surfaces, lime emphasis, category-tinted item imagery, two visible approach buttons, and Items/Abilities/Validation navigation keep the phone experience focused. Desktop retains the same 680px column. No account editing, sharing backend, or speculative features were added.
+- A single centered column, parchment shop panels, cyan emphasis, category-colored cards with real shop imagery and Roman tier corners, two visible approach buttons, and Items/Abilities/Validation navigation keep the phone experience focused. Desktop retains the same 680px column. No account editing, sharing backend, or speculative features were added.
 - Native select and modal dialog provide keyboard behavior and touch targets. Escape/backdrop/close dismiss item details; focus returns to the triggering item. The modal prevents background scrolling. Reduced-motion preferences are respected.
 - Detail cards use unmodified catalog costs plus separate credited purchase cost. Stats use source labels/values/units; unspecified, zero/default-disabled, and `-1` sentinel values are hidden. All provided nonduplicate tooltip/description prose is rendered as plain text. API HTML/SVG is stripped rather than executed; visual inline icons become text-only. Item names, badges, and primary imagery always remain visible.
 - All required imagery is downloaded from factual asset URLs; there are no generated approximations, remote fonts, runtime API calls, or tracking. Snapshot errors show a retry state with the fetch command instead of a blank page.
@@ -145,4 +147,4 @@ Non-Infernus builds show “Core check: N/A” and an Infernus-only validation e
 
 ## Source layout
 
-`scripts/fetch-data.mjs` owns acquisition; `src/generator.ts` owns pure generation; `src/validation.ts` owns held-out core/scoring/loading; `src/personalization.ts` owns pacing; `src/assetText.ts` owns safe source-text rendering; `src/main.tsx` and `src/style.css` own UI. Tests are in `tests/optimizer.test.ts` and `scripts/verify-browser.ts`. The snapshots and image files are intentional deliverables, not gitignored build output.
+`scripts/fetch-data.mjs` owns acquisition; `src/generator.ts` owns pure generation; `src/validation.ts` owns held-out core/scoring/loading; `src/personalization.ts` owns pacing; `src/assetText.ts` owns safe source-text rendering; `src/main.tsx`, `src/AbilityTimeline.tsx`, `src/style.css`, and `src/shop.css` own UI. Tests are in `tests/optimizer.test.ts` and `scripts/verify-browser.ts`. The snapshots and image files are intentional deliverables, not gitignored build output.

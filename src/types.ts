@@ -71,6 +71,7 @@ export interface PairStats {
   matches: number;
 }
 export interface Analytics {
+  highSkill?: Analytics;
   heroMatches: number;
   itemStats: ItemStats[];
   abilityOrders: AbilityStats[];
@@ -106,6 +107,8 @@ export interface AbilityStep {
   ap: number;
 }
 export interface Build {
+  cohort: string;
+  cohortMatches: number;
   id: string;
   name: string;
   subtitle: string;

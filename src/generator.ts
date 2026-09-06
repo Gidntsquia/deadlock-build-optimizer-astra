@@ -161,8 +161,13 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
   const selectedHero = data.heroes.find((h) => h.id === heroId);
   if (!selectedHero) throw new Error("Unknown hero");
   const hero: Hero = selectedHero;
-  const analytics = data.analytics[heroId];
-  if (!analytics) throw new Error("Missing hero analytics");
+  const population = data.analytics[heroId];
+  if (!population) throw new Error("Missing hero analytics");
+  const useHighSkill =
+    !!population.highSkill &&
+    population.highSkill.heroMatches >= 1000 &&
+    population.highSkill.itemStats.length >= 30;
+  const analytics = useHighSkill ? population.highSkill! : population;
   const pool = data.items.filter(
     (i) => i.shopable && i.cost > 0 && i.item_tier >= 1 && i.item_tier <= 4,
   );
@@ -209,37 +214,19 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
         name: "Early",
         tiers: [1],
         time: 240,
-        slots: [
-          focus,
-          "vitality",
-          focus,
-          focus === "weapon" ? "spirit" : "weapon",
-          null,
-        ],
+        slots: [focus, "vitality", focus, null, null],
       },
       {
         name: "Mid",
         tiers: [2, 3],
         time: 900,
-        slots: [
-          focus,
-          "vitality",
-          focus,
-          focus === "weapon" ? "spirit" : "weapon",
-          null,
-        ],
+        slots: [focus, "vitality", focus, null, null],
       },
       {
         name: "Late",
         tiers: [3, 4],
         time: 1680,
-        slots: [
-          focus,
-          "vitality",
-          focus,
-          focus === "weapon" ? "spirit" : "weapon",
-          null,
-        ],
+        slots: [focus, "vitality", focus, null, null],
       },
     ];
     const ancestors = (i: Asset): Asset[] =>
@@ -257,6 +244,13 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
             ),
             win = rate(s?.wins || 0, s?.matches || 0);
           const investment = hero.cost_bonuses[item.item_slot_type] || [];
+          const payment = Math.max(
+            0,
+            item.cost -
+              ancestors(item)
+                .filter((i) => owned.has(i.id))
+                .reduce((sum, i) => sum + i.cost, 0),
+          );
           const before =
             investment
               .filter((b) => b.gold_threshold <= spent[item.item_slot_type])
@@ -264,8 +258,7 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
           const after =
             investment
               .filter(
-                (b) =>
-                  b.gold_threshold <= spent[item.item_slot_type] + item.cost,
+                (b) => b.gold_threshold <= spent[item.item_slot_type] + payment,
               )
               .at(-1)?.bonus || 0;
           const relation = [...owned].map((id) => {
@@ -306,7 +299,10 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
               [...owned].filter((id) => itemMap.get(id)?.is_active_item)
                 .length < 4),
         );
-        const ranked = eligible
+        const observed = eligible.filter(
+          (i) => (statMap.get(i.id)?.matches || 0) >= 20,
+        );
+        const ranked = (observed.length ? observed : eligible)
           .map(evaluate)
           .sort((a, b) => b.score - a.score || a.item.id - b.item.id);
         if (!ranked.length)
@@ -348,6 +344,8 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
         });
       }
     return {
+      cohort: useHighSkill ? "Ascendant+" : "All skill levels",
+      cohortMatches: analytics.heroMatches,
       id: focus,
       name:
         focus === "spirit"

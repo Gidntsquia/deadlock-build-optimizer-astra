@@ -1,17 +1,17 @@
 {
-  "evaluatedAt": "2026-09-05T05:03:25.425Z",
-  "generatorSha256": "777af446c694cfa67d18ea5b3eda7a5bf3e9e817081288c8f7835431b7ec0a7e",
+  "evaluatedAt": "2026-09-06T06:05:06.617Z",
+  "generatorSha256": "e5ba913eb8ddc757b740e494e1cefcbbcc320b7a9a3a6aecc9275c6009a5f905",
   "sampleSize": 30,
   "rule": "Unweighted frequency >=30%; wins weighted 1.5x in overlap and timing; experiments excluded",
   "reports": [
     {
       "name": "Afterburn engine",
-      "agreement": 31,
-      "overlap": 0.14448292924294906,
-      "order": 0.7,
-      "shared": 5,
+      "agreement": 35,
+      "overlap": 0.1845360824742268,
+      "order": 0.7333333333333333,
+      "shared": 6,
       "coreCount": 24,
-      "pairs": 10
+      "pairs": 15
     },
     {
       "name": "Bullet pressure",

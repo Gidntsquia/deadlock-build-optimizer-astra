@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { flushSync } from "react-dom";
+import { AbilityTimeline } from "./AbilityTimeline";
 import {
   Flame,
   Crosshair,
@@ -31,6 +32,7 @@ import type {
   ValidationMatch,
 } from "./types";
 import "./style.css";
+import "./shop.css";
 const base = import.meta.env.BASE_URL;
 const souls = (n: number) => n.toLocaleString("en-US");
 const compact = (n: number) => `${(n / 1000).toFixed(1)}k`;
@@ -194,7 +196,7 @@ function App({ data }: { data: Data }) {
       <main>
         <section className="hero-panel" aria-label="Hero selection">
           <div className="hero-copy">
-            <span className="eyebrow">THEORY INTO FIREPOWER</span>
+            <span className="eyebrow">Build browser</span>
             <h1>{hero.name}</h1>
             <p>{hero.description.role}</p>
             <label className="hero-select">
@@ -300,6 +302,9 @@ function App({ data }: { data: Data }) {
               <div>
                 <h2>The buy order</h2>
                 <p>{build.subtitle}</p>
+                <p className="cohort-caption">
+                  {build.cohort} · {souls(build.cohortMatches)} hero matches
+                </p>
               </div>
               <span className={`focus-badge ${build.focus}`}>
                 {build.focus}
@@ -332,7 +337,7 @@ function App({ data }: { data: Data }) {
                         n = build.items.indexOf(b) + 1;
                       return (
                         <button
-                          className="item-row"
+                          className={`item-row shop-card ${item.item_slot_type}`}
                           key={b.itemId}
                           data-item-id={b.itemId}
                           onClick={() => setDetail(b)}
@@ -347,6 +352,12 @@ function App({ data }: { data: Data }) {
                               alt={item.name}
                               loading="lazy"
                             />
+                            <span className="shop-tier">
+                              {["", "I", "II", "III", "IV"][item.item_tier]}
+                            </span>
+                            {item.is_active_item && (
+                              <span className="shop-active">Active</span>
+                            )}
                           </div>
                           <div className="item-main">
                             <strong>{item.name}</strong>
@@ -381,7 +392,6 @@ function App({ data }: { data: Data }) {
                             <strong>◈ {souls(b.cost)}</strong>
                             <span>{souls(b.total)} total</span>
                           </div>
-                          <ChevronRight size={15} />
                         </button>
                       );
                     })}
@@ -403,11 +413,17 @@ function App({ data }: { data: Data }) {
           <section className="view" aria-label="Ability order">
             <div className="view-intro">
               <div>
-                <h2>Level with a plan</h2>
+                <h2>Ability upgrades</h2>
                 <p>Unlocks and upgrade tiers, in order.</p>
               </div>
               <Activity size={25} />
             </div>
+            <AbilityTimeline
+              hero={hero}
+              assets={data.abilities}
+              build={build}
+              photo={photo}
+            />
             <div className="ability-key">
               {[1, 2, 3, 4].map((slot) => {
                 const a = data.abilities.find(
@@ -428,26 +444,29 @@ function App({ data }: { data: Data }) {
                 : `Selected from complete aggregate paths · ${souls(build.abilityEvidence)} matches. Both builds share this evidence-based path.`}{" "}
               Levels follow the hero’s soul and ability-point thresholds.
             </p>
-            <ol className="ability-sequence">
-              {build.abilityOrder.map((s, i) => (
-                <li key={i}>
-                  <span className="step-index">{i + 1}</span>
-                  <span className="ability-slot">{s.slot}</span>
-                  <div>
-                    <strong>{s.name}</strong>
-                    <span>
-                      Level {s.level} · {souls(s.souls)} souls
-                      {s.ap > 0 ? ` · ${s.ap} AP` : ""}
+            <details className="ability-order-details">
+              <summary>Full order with levels & soul thresholds</summary>
+              <ol className="ability-sequence">
+                {build.abilityOrder.map((s, i) => (
+                  <li key={i}>
+                    <span className="step-index">{i + 1}</span>
+                    <span className="ability-slot">{s.slot}</span>
+                    <div>
+                      <strong>{s.name}</strong>
+                      <span>
+                        Level {s.level} · {souls(s.souls)} souls
+                        {s.ap > 0 ? ` · ${s.ap} AP` : ""}
+                      </span>
+                    </div>
+                    <span
+                      className={s.tier === 0 ? "unlock-label" : "tier-label"}
+                    >
+                      {s.tier === 0 ? "Unlock" : `Tier ${s.tier}`}
                     </span>
-                  </div>
-                  <span
-                    className={s.tier === 0 ? "unlock-label" : "tier-label"}
-                  >
-                    {s.tier === 0 ? "Unlock" : `Tier ${s.tier}`}
-                  </span>
-                </li>
-              ))}
-            </ol>
+                  </li>
+                ))}
+              </ol>
+            </details>
           </section>
         )}
         {tab === "Validation" && (

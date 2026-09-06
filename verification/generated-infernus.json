@@ -1,5 +1,7 @@
 [
   {
+    "cohort": "All skill levels",
+    "cohortMatches": 122577,
     "id": "spirit",
     "name": "Afterburn engine",
     "subtitle": "Sustained spirit damage & survivability",
@@ -94,7 +96,7 @@
         "phase": "Mid",
         "cost": 800,
         "total": 8000,
-        "score": 0.6461953823841812,
+        "score": 0.6081953823841811,
         "winRate": 0.49110814371998834,
         "usage": 0.9221224210088352,
         "upgradesFrom": [
@@ -104,27 +106,25 @@
         "reason": "Build focus · passive value · component upgrade"
       },
       {
-        "itemId": 2739107182,
-        "phase": "Mid",
-        "cost": 2400,
-        "total": 10400,
-        "score": 0.5634242166579987,
-        "winRate": 0.4918075422626788,
-        "usage": 0.18780032143061096,
-        "upgradesFrom": [
-          668299740
-        ],
-        "sell": [],
-        "reason": "Balanced support · passive value · component upgrade"
-      },
-      {
-        "itemId": 4104549924,
+        "itemId": 1150006784,
         "phase": "Mid",
         "cost": 1600,
-        "total": 12000,
-        "score": 0.5789152577567197,
-        "winRate": 0.48501387604070306,
-        "usage": 0.6169183452034231,
+        "total": 9600,
+        "score": 0.5663687183702488,
+        "winRate": 0.5082568807339449,
+        "usage": 0.004038277980371522,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Build focus · passive value"
+      },
+      {
+        "itemId": 876563814,
+        "phase": "Mid",
+        "cost": 1600,
+        "total": 11200,
+        "score": 0.5543771207496696,
+        "winRate": 0.49573786082882754,
+        "usage": 0.9260138525171933,
         "upgradesFrom": [],
         "sell": [],
         "reason": "Balanced support · passive value"
@@ -133,8 +133,8 @@
         "itemId": 2519598785,
         "phase": "Late",
         "cost": 4800,
-        "total": 16800,
-        "score": 0.6836672964614502,
+        "total": 16000,
+        "score": 0.6619590246855186,
         "winRate": 0.5322367815386504,
         "usage": 0.5312905357448787,
         "upgradesFrom": [
@@ -146,21 +146,23 @@
       {
         "itemId": 1797283378,
         "phase": "Late",
-        "cost": 6400,
-        "total": 23200,
-        "score": 0.7099117928999873,
+        "cost": 4800,
+        "total": 20800,
+        "score": 0.7111852581661313,
         "winRate": 0.5560078150439596,
         "usage": 0.09980665214518221,
-        "upgradesFrom": [],
+        "upgradesFrom": [
+          876563814
+        ],
         "sell": [],
-        "reason": "Balanced support · active utility"
+        "reason": "Balanced support · active utility · component upgrade"
       },
       {
         "itemId": 3919289022,
         "phase": "Late",
         "cost": 6400,
-        "total": 29600,
-        "score": 0.57778945718767,
+        "total": 27200,
+        "score": 0.5920688969775174,
         "winRate": 0.5573209670062338,
         "usage": 0.10690423162583519,
         "upgradesFrom": [],
@@ -171,8 +173,8 @@
         "itemId": 2226497419,
         "phase": "Late",
         "cost": 6400,
-        "total": 36000,
-        "score": 0.8019212476036336,
+        "total": 33600,
+        "score": 0.8022952450447386,
         "winRate": 0.5256164558579277,
         "usage": 0.6381295022720412,
         "upgradesFrom": [],
@@ -183,8 +185,8 @@
         "itemId": 865846625,
         "phase": "Late",
         "cost": 6400,
-        "total": 42400,
-        "score": 0.5871591720352292,
+        "total": 40000,
+        "score": 0.5876510438606668,
         "winRate": 0.5327372571106731,
         "usage": 0.23134845851995073,
         "upgradesFrom": [],
@@ -340,10 +342,12 @@
     ],
     "abilityEvidence": 6704,
     "abilityFallback": false,
-    "total": 42400,
+    "total": 40000,
     "kitNote": "Bullet buildup in the kit makes fire rate valuable alongside spirit scaling."
   },
   {
+    "cohort": "All skill levels",
+    "cohortMatches": 122577,
     "id": "weapon",
     "name": "Bullet pressure",
     "subtitle": "Weapon damage & sustained fire",
@@ -414,7 +418,7 @@
         "phase": "Mid",
         "cost": 800,
         "total": 4800,
-        "score": 0.6205917889907844,
+        "score": 0.6145917889907844,
         "winRate": 0.48501387604070306,
         "usage": 0.6169183452034231,
         "upgradesFrom": [
@@ -510,30 +514,30 @@
         "reason": "Build focus · passive value"
       },
       {
-        "itemId": 3919289022,
-        "phase": "Late",
-        "cost": 6400,
-        "total": 39200,
-        "score": 0.5899960195610272,
-        "winRate": 0.5573209670062338,
-        "usage": 0.10690423162583519,
-        "upgradesFrom": [],
-        "sell": [],
-        "reason": "Balanced support · passive value"
-      },
-      {
         "itemId": 1797283378,
         "phase": "Late",
         "cost": 6400,
-        "total": 45600,
-        "score": 0.5930908942496415,
+        "total": 39200,
+        "score": 0.5939309497119895,
         "winRate": 0.5560078150439596,
         "usage": 0.09980665214518221,
+        "upgradesFrom": [],
+        "sell": [],
+        "reason": "Balanced support · active utility"
+      },
+      {
+        "itemId": 3919289022,
+        "phase": "Late",
+        "cost": 6400,
+        "total": 45600,
+        "score": 0.5894271507537835,
+        "winRate": 0.5573209670062338,
+        "usage": 0.10690423162583519,
         "upgradesFrom": [],
         "sell": [
           968099481
         ],
-        "reason": "Balanced support · active utility"
+        "reason": "Balanced support · passive value"
       }
     ],
     "abilityOrder": [

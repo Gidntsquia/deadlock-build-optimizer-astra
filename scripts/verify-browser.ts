@@ -193,6 +193,13 @@ try {
         .getByRole("button", { name: "Abilities", exact: true })
         .click();
       await expect(page.locator(".ability-sequence li")).toHaveCount(16);
+      await expect(page.locator(".ability-board")).toBeVisible();
+      await expect(page.locator(".timeline-phone .point-marker")).toHaveCount(
+        16,
+      );
+      await expect(page.locator(".timeline-phone .point-unlock")).toHaveCount(
+        4,
+      );
       await layout();
       await page
         .getByRole("button", { name: "Validation", exact: true })

@@ -125,6 +125,10 @@ const heroStats = await request(
   `${api}/v1/analytics/hero-stats?min_unix_timestamp=${start}&max_unix_timestamp=${end - 1}&game_mode=normal&match_mode=ranked,unranked`,
 );
 await save(path.join(DATA, "hero-stats.json"), heroStats);
+const highSkillHeroStats = await request(
+  `${api}/v1/analytics/hero-stats?min_unix_timestamp=${start}&max_unix_timestamp=${end - 1}&game_mode=normal&match_mode=ranked,unranked&min_average_badge=100`,
+);
+await save(path.join(DATA, "high-skill-hero-stats.json"), highSkillHeroStats);
 const analytics = {};
 await pool(heroes, async (h) => {
   const q = new URLSearchParams({
@@ -147,6 +151,26 @@ await pool(heroes, async (h) => {
   if (!heroMatches)
     throw new Error(`No aggregate hero denominator for ${h.name}`);
   analytics[h.id] = { heroMatches, itemStats, abilityOrders, permutations };
+  const highMatches =
+    highSkillHeroStats.find((s) => s.hero_id === h.id)?.matches || 0;
+  if (highMatches >= 1000) {
+    const eliteQuery = `${q}&min_average_badge=100`;
+    const highItems = await request(
+      `${api}/v1/analytics/item-stats?${eliteQuery}`,
+    );
+    const highOrders = await request(
+      `${api}/v1/analytics/ability-order-stats?${eliteQuery}&min_ability_upgrades=16&max_ability_upgrades=16`,
+    );
+    const highPairs = await request(
+      `${api}/v1/analytics/item-permutation-stats?${eliteQuery}&comb_size=2`,
+    );
+    analytics[h.id].highSkill = {
+      heroMatches: highMatches,
+      itemStats: highItems,
+      abilityOrders: highOrders,
+      permutations: highPairs,
+    };
+  }
   console.log(
     `Analytics ${h.name}: ${itemStats.length} items, ${abilityOrders.length} orders, ${permutations.length} pairs`,
   );

@@ -6,35 +6,36 @@ lo               UNKNOWN        127.0.0.1/8 ::1/128
 
 vite v6.4.3 building for production...
 transforming...
-✓ 1583 modules transformed.
+✓ 1585 modules transformed.
 rendering chunks...
 computing gzip size...
-dist/index.html                   0.92 kB │ gzip:  0.56 kB
-dist/assets/index-BeTWtRIE.css   15.97 kB │ gzip:  4.21 kB
-dist/assets/index-Cks_oJ8n.js   226.22 kB │ gzip: 71.96 kB
-✓ built in 2.25s
+dist/index.html                   0.92 kB │ gzip:  0.55 kB
+dist/assets/index-Dzl3Bvcg.css   24.94 kB │ gzip:  6.27 kB
+dist/assets/index-Dlx2BefJ.js   228.67 kB │ gzip: 72.69 kB
+✓ built in 2.46s
 
 > deadlock-build-optimizer@1.0.0 test
 > tsx --test tests/*.test.ts
 
-✔ snapshots cover every active hero and all current shop assets (3.3949ms)
-﹣ strict >=200 shopable criterion is transparently reported, never faked (0.2185ms) # UPSTREAM LIMITATION: 173 shopable, 251 catalog items
-✔ every hero deterministically generates distinct legal 15-purchase plans (2703.105593ms)
-✔ all heroes have four real abilities with legal unlocks and 1/2/5 AP upgrades (894.769798ms)
-✔ validation sample contains at least 20 real Infernus matches, disjoint from training (2.3392ms)
-✔ core threshold is unweighted 30%, repeats count once, wins weight frequency and timing (0.6363ms)
-✔ validation penalizes extra/missing items and reversed shared purchase order (24.4268ms)
-✔ generator has no player/validation dependency or hidden filesystem access (0.7531ms)
-✔ personalization uses standard-mode match data and correct median (1.3567ms)
-✔ detail text preserves source values and strips executable markup (14.6919ms)
-ℹ tests 10
+✔ sparse expert cohorts fall back without mixing population denominators (204.2716ms)
+✔ snapshots cover every active hero and all current shop assets (1.8561ms)
+﹣ strict >=200 shopable criterion is transparently reported, never faked (0.2249ms) # UPSTREAM LIMITATION: 173 shopable, 251 catalog items
+✔ every hero deterministically generates distinct legal 15-purchase plans (4156.152002ms)
+✔ all heroes have four real abilities with legal unlocks and 1/2/5 AP upgrades (1178.996799ms)
+✔ validation sample contains at least 20 real Infernus matches, disjoint from training (2.7515ms)
+✔ core threshold is unweighted 30%, repeats count once, wins weight frequency and timing (0.8452ms)
+✔ validation penalizes extra/missing items and reversed shared purchase order (28.848ms)
+✔ generator has no player/validation dependency or hidden filesystem access (0.7618ms)
+✔ personalization uses standard-mode match data and correct median (1.0738ms)
+✔ detail text preserves source values and strips executable markup (11.0964ms)
+ℹ tests 11
 ℹ suites 0
-ℹ pass 9
+ℹ pass 10
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 1
 ℹ todo 0
-ℹ duration_ms 4253.466189
+ℹ duration_ms 6347.857701
 
 > deadlock-build-optimizer@1.0.0 validate
 > tsx scripts/validate.ts
@@ -42,12 +43,12 @@ dist/assets/index-Cks_oJ8n.js   226.22 kB │ gzip: 71.96 kB
 [
   {
     "name": "Afterburn engine",
-    "agreement": 31,
-    "overlap": 0.14448292924294906,
-    "order": 0.7,
-    "shared": 5,
+    "agreement": 35,
+    "overlap": 0.1845360824742268,
+    "order": 0.7333333333333333,
+    "shared": 6,
     "coreCount": 24,
-    "pairs": 10
+    "pairs": 15
   },
   {
     "name": "Bullet pressure",
@@ -64,7 +65,7 @@ dist/assets/index-Cks_oJ8n.js   226.22 kB │ gzip: 71.96 kB
 > tsx scripts/verify-browser.ts
 
 {
-  "testedAt": "2026-09-05T05:03:49.966Z",
+  "testedAt": "2026-09-06T06:05:38.545Z",
   "viewport": "390×844",
   "productionBuild": true,
   "externalNetwork": "blocked",

@@ -28,6 +28,40 @@ const data: AggregateData = {
 };
 const manifest: Manifest = read("manifest"),
   matches: ValidationMatch[] = read("zergggy-matches");
+
+test("sparse expert cohorts fall back without mixing population denominators", () => {
+  const population = { ...data.analytics[1], highSkill: undefined };
+  const buildWith = (heroMatches: number, rows: number) =>
+    generateBuilds(
+      {
+        ...data,
+        analytics: {
+          ...data.analytics,
+          1: {
+            ...population,
+            highSkill: {
+              ...population,
+              heroMatches,
+              itemStats: population.itemStats.slice(0, rows),
+            },
+          },
+        },
+      },
+      1,
+    )[0];
+  const baseline = generateBuilds(
+    { ...data, analytics: { ...data.analytics, 1: population } },
+    1,
+  )[0];
+  for (const candidate of [buildWith(999, 30), buildWith(1000, 29)]) {
+    assert.equal(candidate.cohort, "All skill levels");
+    assert.equal(candidate.cohortMatches, population.heroMatches);
+    assert.deepEqual(candidate.items, baseline.items);
+  }
+  const eligible = buildWith(1000, population.itemStats.length);
+  assert.equal(eligible.cohort, "Ascendant+");
+  assert.equal(eligible.cohortMatches, 1000);
+});
 test("snapshots cover every active hero and all current shop assets", () => {
   assert.ok(data.items.length >= 200);
   assert.equal(
