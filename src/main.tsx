@@ -210,7 +210,7 @@ function App({ data }: { data: Data }) {
             {build.items.length} purchases
           </span>
           <span className="soul-color">◈ {souls(build.total)} souls</span>
-          <span>3 phases</span>
+          <span>{new Set(build.items.map((b) => b.phase)).size} phases</span>
         </div>
         <nav className="tabs" aria-label="Build view">
           {["Items", "Abilities", "Validation"].map((t) => (
@@ -248,90 +248,94 @@ function App({ data }: { data: Data }) {
                 {build.focus}
               </span>
             </div>
-            {(["Early", "Mid", "Late"] as const).map((phase, idx) => (
-              <section
-                className="phase"
-                key={phase}
-                aria-label={`${phase} game`}
-              >
-                <div className="phase-heading">
-                  <div>
-                    <span className="phase-number">0{idx + 1}</span>
-                    <h3>{phase} game</h3>
+            {(["Early", "Mid", "Late"] as const)
+              .filter((phase) => build.items.some((b) => b.phase === phase))
+              .map((phase, idx) => (
+                <section
+                  className="phase"
+                  key={phase}
+                  aria-label={`${phase} game`}
+                >
+                  <div className="phase-heading">
+                    <div>
+                      <span className="phase-number">0{idx + 1}</span>
+                      <h3>{phase} game</h3>
+                    </div>
+                    <span>
+                      {idx === 0
+                        ? "ESTABLISH YOUR LANE"
+                        : idx === 1
+                          ? "COME ONLINE"
+                          : "CLOSE IT OUT"}
+                    </span>
                   </div>
-                  <span>
-                    {idx === 0
-                      ? "ESTABLISH YOUR LANE"
-                      : idx === 1
-                        ? "COME ONLINE"
-                        : "CLOSE IT OUT"}
-                  </span>
-                </div>
-                <div className="item-list">
-                  {build.items
-                    .filter((b) => b.phase === phase)
-                    .map((b) => {
-                      const item = itemMap.get(b.itemId)!,
-                        n = build.items.indexOf(b) + 1;
-                      return (
-                        <button
-                          className={`item-row shop-card ${item.item_slot_type}`}
-                          key={b.itemId}
-                          data-item-id={b.itemId}
-                          onClick={() => setDetail(b)}
-                          aria-label={`View ${item.name}`}
-                        >
-                          <span className="buy-number">
-                            {String(n).padStart(2, "0")}
-                          </span>
-                          <div className={`item-image ${item.item_slot_type}`}>
-                            <img
-                              src={photo(`item-${item.id}`)}
-                              alt={item.name}
-                              loading="lazy"
-                            />
-                            <span className="shop-tier">
-                              {["", "I", "II", "III", "IV"][item.item_tier]}
+                  <div className="item-list">
+                    {build.items
+                      .filter((b) => b.phase === phase)
+                      .map((b) => {
+                        const item = itemMap.get(b.itemId)!,
+                          n = build.items.indexOf(b) + 1;
+                        return (
+                          <button
+                            className={`item-row shop-card ${item.item_slot_type}`}
+                            key={b.itemId}
+                            data-item-id={b.itemId}
+                            onClick={() => setDetail(b)}
+                            aria-label={`View ${item.name}`}
+                          >
+                            <span className="buy-number">
+                              {String(n).padStart(2, "0")}
                             </span>
-                            {item.is_active_item && (
-                              <span className="shop-active">Active</span>
-                            )}
-                          </div>
-                          <div className="item-main">
-                            <strong>{item.name}</strong>
-                            <div className="item-tags">
-                              <span
-                                className={`core-badge ${heroId === 1 && coreIds.has(item.id) ? "is-core" : ""}`}
-                              >
-                                {heroId !== 1
-                                  ? "Core check: N/A"
-                                  : coreIds.has(item.id)
-                                    ? "✓ Zergggy core"
-                                    : "Not core"}
+                            <div
+                              className={`item-image ${item.item_slot_type}`}
+                            >
+                              <img
+                                src={photo(`item-${item.id}`)}
+                                alt={item.name}
+                                loading="lazy"
+                              />
+                              <span className="shop-tier">
+                                {["", "I", "II", "III", "IV"][item.item_tier]}
                               </span>
-                              {b.upgradesFrom.length > 0 && (
-                                <span>Upgrade</span>
+                              {item.is_active_item && (
+                                <span className="shop-active">Active</span>
                               )}
                             </div>
-                            {b.sell.length > 0 && (
-                              <small>
-                                Sell{" "}
-                                {b.sell
-                                  .map((id) => itemMap.get(id)?.name)
-                                  .join(", ")}
-                              </small>
-                            )}
-                          </div>
-                          <div className="item-cost">
-                            <strong>◈ {souls(b.cost)}</strong>
-                            <span>{souls(b.total)} total</span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                </div>
-              </section>
-            ))}
+                            <div className="item-main">
+                              <strong>{item.name}</strong>
+                              <div className="item-tags">
+                                <span
+                                  className={`core-badge ${heroId === 1 && coreIds.has(item.id) ? "is-core" : ""}`}
+                                >
+                                  {heroId !== 1
+                                    ? "Core check: N/A"
+                                    : coreIds.has(item.id)
+                                      ? "✓ Zergggy core"
+                                      : "Not core"}
+                                </span>
+                                {b.upgradesFrom.length > 0 && (
+                                  <span>Upgrade</span>
+                                )}
+                              </div>
+                              {b.sell.length > 0 && (
+                                <small>
+                                  Sell{" "}
+                                  {b.sell
+                                    .map((id) => itemMap.get(id)?.name)
+                                    .join(", ")}
+                                </small>
+                              )}
+                            </div>
+                            <div className="item-cost">
+                              <strong>◈ {souls(b.cost)}</strong>
+                              <span>{souls(b.total)} total</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                  </div>
+                </section>
+              ))}
             <p className="fine-print">
               Tap an item for its full shop card. Component credit is included;
               totals exclude sale refunds. “Not core” means below 30% in the
@@ -377,7 +381,7 @@ function App({ data }: { data: Data }) {
             <p className="explanation">
               {build.abilityFallback
                 ? "No complete aggregate order met the sample threshold. This is a legal, balanced fallback."
-                : `Selected from complete aggregate paths · ${souls(build.abilityEvidence)} matches.`}{" "}
+                : `Selected from complete ${build.abilityCohort} paths · ${souls(build.abilityEvidence)} matches.`}{" "}
               Levels follow the hero’s soul and ability-point thresholds.
             </p>
             <details className="ability-order-details">

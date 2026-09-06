@@ -98,7 +98,9 @@ try {
   await expect(
     page.getByRole("heading", { name: "Infernus", exact: true }),
   ).toBeVisible();
-  await expect(page.locator(".item-row")).toHaveCount(15);
+  await expect(page.locator(".item-row")).toHaveCount(
+    generateBuilds(data, 1)[0].items.length,
+  );
   await expect(
     page.locator(".build-option, .personal-note, .stretch"),
   ).toHaveCount(0);
@@ -191,7 +193,9 @@ try {
     ).toBeVisible();
     for (let index = 0; index < 1; index++) {
       await page.getByRole("button", { name: "Items", exact: true }).click();
-      await expect(page.locator(".item-row")).toHaveCount(15);
+      await expect(page.locator(".item-row")).toHaveCount(
+        generateBuilds(data, hero.id)[0].items.length,
+      );
       await layout();
       await page
         .getByRole("button", { name: "Abilities", exact: true })

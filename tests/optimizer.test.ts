@@ -91,15 +91,52 @@ test("sparse expert cohorts fall back without mixing population denominators", (
     { ...data, analytics: { ...data.analytics, 1: population } },
     1,
   )[0];
-  for (const candidate of [buildWith(999, 30), buildWith(1000, 29)]) {
+  for (const candidate of [buildWith(199, 30), buildWith(200, 11)]) {
     assert.equal(candidate.cohort, "All skill levels");
     assert.equal(candidate.cohortMatches, population.heroMatches);
     assert.deepEqual(candidate.items, baseline.items);
   }
-  const eligible = buildWith(1000, population.itemStats.length);
+  const eligible = buildWith(200, population.itemStats.length);
   assert.equal(eligible.cohort, "Ascendant+");
-  assert.equal(eligible.cohortMatches, 1000);
+  assert.equal(eligible.cohortMatches, 200);
 });
+test("expert item decisions are independent of broad-population preferences", () => {
+  const baseline = generateBuilds(data, 1)[0];
+  assert.equal(baseline.cohort, "Ascendant+");
+  const population = data.analytics[1];
+  const changed = generateBuilds(
+    {
+      ...data,
+      analytics: {
+        ...data.analytics,
+        1: {
+          ...population,
+          heroMatches: 1,
+          itemStats: [],
+          permutations: [],
+        },
+      },
+    },
+    1,
+  )[0];
+  assert.deepEqual(changed.items, baseline.items);
+  const withoutExpertPaths = generateBuilds(
+    {
+      ...data,
+      analytics: {
+        ...data.analytics,
+        1: {
+          ...population,
+          highSkill: { ...population.highSkill!, abilityOrders: [] },
+        },
+      },
+    },
+    1,
+  )[0];
+  assert.equal(withoutExpertPaths.abilityCohort, "All skill levels");
+  assert.ok(withoutExpertPaths.abilityEvidence > 0);
+});
+
 test("snapshots cover every active hero and all current shop assets", () => {
   assert.ok(data.items.length >= 200);
   assert.equal(
@@ -126,7 +163,7 @@ test("strict >=200 shopable criterion is transparently reported, never faked", (
     );
   } else assert.ok(manifest.shopableItems >= 200);
 });
-test("every hero deterministically generates one legal 15-purchase plan", () => {
+test("every hero deterministically generates one legal adaptive purchase plan", () => {
   assert.ok(
     Math.abs(Object.values(WEIGHTS).reduce((a, b) => a + b, 0) - 1) < 1e-12,
   );
@@ -140,11 +177,29 @@ test("every hero deterministically generates one legal 15-purchase plan", () => 
       .update(JSON.stringify(builds))
       .digest("hex");
     for (const b of builds) {
-      assert.ok(b.items.length >= 12);
+      assert.ok(b.items.length >= 12 && b.items.length <= 24);
+      const cohort =
+        b.cohort === "Ascendant+"
+          ? data.analytics[hero.id].highSkill!
+          : data.analytics[hero.id];
+      const popular = data.items.filter(
+        (i) =>
+          i.shopable &&
+          i.cost > 0 &&
+          i.item_tier >= 1 &&
+          i.item_tier <= 4 &&
+          (cohort.itemStats.find((s) => s.item_id === i.id)?.matches || 0) /
+            Math.max(1, cohort.heroMatches) >=
+            0.3,
+      );
+      assert.equal(b.items.length, Math.min(24, Math.max(12, popular.length)));
       assert.equal(new Set(b.items.map((i) => i.itemId)).size, b.items.length);
+      const phases = b.items.map((b) =>
+        ["Early", "Mid", "Late"].indexOf(b.phase),
+      );
       assert.deepEqual(
-        [...new Set(b.items.map((i) => i.phase))],
-        ["Early", "Mid", "Late"],
+        phases,
+        [...phases].sort((a, b) => a - b),
       );
       let total = 0;
       const owned = new Set<number>();
@@ -168,8 +223,6 @@ test("every hero deterministically generates one legal 15-purchase plan", () => 
             (id) => data.items.find((i) => i.id === id)!.is_active_item,
           ).length <= 4,
         );
-        assert.ok(buy.phase !== "Early" || item.item_tier === 1);
-        assert.ok(buy.phase !== "Late" || item.item_tier >= 3);
       }
       assert.equal(b.total, total);
     }

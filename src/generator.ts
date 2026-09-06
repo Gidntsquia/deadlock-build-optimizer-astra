@@ -165,8 +165,8 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
   if (!population) throw new Error("Missing hero analytics");
   const useHighSkill =
     !!population.highSkill &&
-    population.highSkill.heroMatches >= 1000 &&
-    population.highSkill.itemStats.length >= 30;
+    population.highSkill.heroMatches >= 200 &&
+    population.highSkill.itemStats.length >= 12;
   const analytics = useHighSkill ? population.highSkill! : population;
   const pool = data.items.filter(
     (i) => i.shopable && i.cost > 0 && i.item_tier >= 1 && i.item_tier <= 4,
@@ -185,7 +185,13 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
   const pairs = new Map(
     analytics.permutations.map((s) => [s.item_ids.join(","), s]),
   );
-  const path = abilityPath(hero, data.abilities, analytics);
+  const expertPath = abilityPath(hero, data.abilities, analytics);
+  const path =
+    useHighSkill && expertPath.fallback
+      ? abilityPath(hero, data.abilities, population)
+      : expertPath;
+  const abilityCohort =
+    useHighSkill && !expertPath.fallback ? "Ascendant+" : "All skill levels";
   const offensiveUsage = (slot: Slot) =>
     pool
       .filter((i) => i.item_slot_type === slot)
@@ -210,162 +216,157 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
       spent: Record<Slot, number> = { weapon: 0, vitality: 0, spirit: 0 };
     const buys: Buy[] = [];
     let total = 0;
-    const phases: {
-      name: Phase;
-      tiers: number[];
-      time: number;
-      slots: (Slot | null)[];
-    }[] = [
-      {
-        name: "Early",
-        tiers: [1],
-        time: 240,
-        slots: [null, null, null, null, null],
-      },
-      {
-        name: "Mid",
-        tiers: [2, 3],
-        time: 900,
-        slots: [null, null, null, null, null],
-      },
-      {
-        name: "Late",
-        tiers: [3, 4],
-        time: 1680,
-        slots: [null, null, null, null, null],
-      },
-    ];
+    const targetCount = Math.min(
+      24,
+      Math.max(
+        12,
+        pool.filter(
+          (i) =>
+            (statMap.get(i.id)?.matches || 0) /
+              Math.max(1, analytics.heroMatches) >=
+            0.3,
+        ).length,
+      ),
+    );
+    const purchaseTime = (item: Asset) =>
+      statMap.get(item.id)?.avg_buy_time_s ??
+      [0, 240, 900, 1380, 1800][item.item_tier];
+    const phaseNames: Phase[] = ["Early", "Mid", "Late"];
+    let phaseIndex = 0;
     const ancestors = (i: Asset): Asset[] =>
       (i.component_items || []).flatMap((c) => {
         const a = byClass.get(c);
         return a ? [a, ...ancestors(a)] : [];
       });
-    for (const phase of phases)
-      for (const [position, slot] of phase.slots.entries()) {
-        function evaluate(item: Asset) {
-          const s = statMap.get(item.id),
-            f = featureMap.get(item.id)!;
-          const usage = clamp(
-              (s?.matches || 0) / Math.max(1, analytics.heroMatches),
-            ),
-            win = rate(s?.wins || 0, s?.matches || 0);
-          const investment = hero.cost_bonuses[item.item_slot_type] || [];
-          const payment = Math.max(
-            0,
-            item.cost -
-              ancestors(item)
-                .filter((i) => owned.has(i.id))
-                .reduce((sum, i) => sum + i.cost, 0),
-          );
-          const before =
-            investment
-              .filter((b) => b.gold_threshold <= spent[item.item_slot_type])
-              .at(-1)?.bonus || 0;
-          const after =
-            investment
-              .filter(
-                (b) => b.gold_threshold <= spent[item.item_slot_type] + payment,
-              )
-              .at(-1)?.bonus || 0;
-          const relation = [...owned].map((id) => {
-            const forward = pairs.get(`${id},${item.id}`),
-              reverse = pairs.get(`${item.id},${id}`);
-            return forward
-              ? rate(forward.wins, forward.matches) *
-                  (forward.matches /
-                    (forward.matches + (reverse?.matches || 0)))
-              : 0.25;
-          });
-          const pair = relation.length
-            ? relation.reduce((a, b) => a + b, 0) / relation.length
-            : 0.5;
-          const phaseScore = s
-            ? Math.exp(-Math.abs(s.avg_buy_time_s - phase.time) / 600)
-            : 0.2;
-          const score =
-            WEIGHTS.win * win +
-            WEIGHTS.usage * usage +
-            (WEIGHTS.value * f.value) / maxValues[item.item_tier] +
-            WEIGHTS.synergy * f.synergy +
-            WEIGHTS.effect * f.effect +
-            WEIGHTS.phase * phaseScore +
-            WEIGHTS.investment * clamp((after - before) / 25) +
-            WEIGHTS.pair * pair;
-          return { item, score, win, usage };
-        }
-        const eligible = pool.filter(
-          (i) =>
-            phase.tiers.includes(i.item_tier) &&
-            !bought.has(i.id) &&
-            (!slot || i.item_slot_type === slot) &&
-            ![...owned].some((id) =>
-              ancestors(itemMap.get(id)!).some((a) => a.id === i.id),
-            ) &&
-            (!i.is_active_item ||
-              [...owned].filter((id) => itemMap.get(id)?.is_active_item)
-                .length < 4),
-        );
-        const observed = eligible.filter(
-          (i) => (statMap.get(i.id)?.matches || 0) >= 20,
-        );
-        const ranked = (observed.length ? observed : eligible)
-          .map(evaluate)
-          .sort((a, b) => b.score - a.score || a.item.id - b.item.id);
-        if (!ranked.length)
-          throw new Error(
-            `Not enough legal ${phase.name} ${slot || ""} items for ${hero.name}`,
-          );
-        // Schedule the strongest remaining purchases by observed timing. A
-        // component must precede its upgrade even when aggregate times disagree.
-        const shortlist = ranked.slice(0, phase.slots.length - position);
-        const scheduled = shortlist
-          .filter(
-            (candidate) =>
-              !ancestors(candidate.item).some((a) =>
-                shortlist.some((other) => other.item.id === a.id),
-              ),
-          )
-          .sort(
-            (a, b) =>
-              (statMap.get(a.item.id)?.avg_buy_time_s ?? phase.time) -
-                (statMap.get(b.item.id)?.avg_buy_time_s ?? phase.time) ||
-              b.score - a.score ||
-              a.item.id - b.item.id,
-          );
-        const choice = scheduled[0],
-          item = choice.item;
-        const components = ancestors(item).filter((i) => owned.has(i.id));
-        // An owned upgrade already includes its own component cost; don't double-credit ancestors.
-        const cost = Math.max(
+    for (let position = 0; position < targetCount; position++) {
+      function evaluate(item: Asset) {
+        const s = statMap.get(item.id),
+          f = featureMap.get(item.id)!;
+        const usage = clamp(
+            (s?.matches || 0) / Math.max(1, analytics.heroMatches),
+          ),
+          win = rate(s?.wins || 0, s?.matches || 0);
+        const investment = hero.cost_bonuses[item.item_slot_type] || [];
+        const payment = Math.max(
           0,
-          item.cost - components.reduce((n, i) => n + i.cost, 0),
+          item.cost -
+            ancestors(item)
+              .filter((i) => owned.has(i.id))
+              .reduce((sum, i) => sum + i.cost, 0),
         );
-        components.forEach((i) => owned.delete(i.id));
-        const sell: number[] = [];
-        if (owned.size >= 12) {
-          const victim = [...owned].sort(
-            (a, b) => itemMap.get(a)!.cost - itemMap.get(b)!.cost || a - b,
-          )[0];
-          owned.delete(victim);
-          sell.push(victim);
-        }
-        total += cost;
-        spent[item.item_slot_type] += cost;
-        bought.add(item.id);
-        owned.add(item.id);
-        buys.push({
-          itemId: item.id,
-          phase: phase.name,
-          cost,
-          total,
-          score: choice.score,
-          winRate: choice.win,
-          usage: choice.usage,
-          upgradesFrom: components.map((i) => i.id),
-          sell,
-          reason: `${Math.round(choice.usage * 100)}% cohort purchase rate · ${item.is_active_item ? "active utility" : "passive value"}${components.length ? " · component upgrade" : ""}`,
+        const before =
+          investment
+            .filter((b) => b.gold_threshold <= spent[item.item_slot_type])
+            .at(-1)?.bonus || 0;
+        const after =
+          investment
+            .filter(
+              (b) => b.gold_threshold <= spent[item.item_slot_type] + payment,
+            )
+            .at(-1)?.bonus || 0;
+        const relation = [...owned].map((id) => {
+          const forward = pairs.get(`${id},${item.id}`),
+            reverse = pairs.get(`${item.id},${id}`);
+          return forward
+            ? rate(forward.wins, forward.matches) *
+                (forward.matches / (forward.matches + (reverse?.matches || 0)))
+            : 0.25;
         });
+        const pair = relation.length
+          ? relation.reduce((a, b) => a + b, 0) / relation.length
+          : 0.5;
+        const phaseScore = s
+          ? Math.exp(
+              -Math.min(
+                ...[240, 900, 1680].map((time) =>
+                  Math.abs(s.avg_buy_time_s - time),
+                ),
+              ) / 600,
+            )
+          : 0.2;
+        const score =
+          WEIGHTS.win * win +
+          WEIGHTS.usage * usage +
+          (WEIGHTS.value * f.value) / maxValues[item.item_tier] +
+          WEIGHTS.synergy * f.synergy +
+          WEIGHTS.effect * f.effect +
+          WEIGHTS.phase * phaseScore +
+          WEIGHTS.investment * clamp((after - before) / 25) +
+          WEIGHTS.pair * pair;
+        return { item, score, win, usage };
       }
+      const eligible = pool.filter(
+        (i) =>
+          !bought.has(i.id) &&
+          ![...owned].some((id) =>
+            ancestors(itemMap.get(id)!).some((a) => a.id === i.id),
+          ) &&
+          (!i.is_active_item ||
+            [...owned].filter((id) => itemMap.get(id)?.is_active_item).length <
+              4),
+      );
+      const observed = eligible.filter(
+        (i) => (statMap.get(i.id)?.matches || 0) >= 20,
+      );
+      const ranked = (observed.length ? observed : eligible)
+        .map(evaluate)
+        .sort((a, b) => b.score - a.score || a.item.id - b.item.id);
+      if (!ranked.length)
+        throw new Error(`Not enough legal items for ${hero.name}`);
+      // Schedule the strongest remaining purchases by observed timing. A
+      // component must precede its upgrade even when aggregate times disagree.
+      const shortlist = ranked.slice(0, targetCount - position);
+      const scheduled = shortlist
+        .filter(
+          (candidate) =>
+            !ancestors(candidate.item).some((a) =>
+              shortlist.some((other) => other.item.id === a.id),
+            ),
+        )
+        .sort(
+          (a, b) =>
+            purchaseTime(a.item) - purchaseTime(b.item) ||
+            b.score - a.score ||
+            a.item.id - b.item.id,
+        );
+      const choice = scheduled[0],
+        item = choice.item;
+      const components = ancestors(item).filter((i) => owned.has(i.id));
+      // An owned upgrade already includes its own component cost; don't double-credit ancestors.
+      const cost = Math.max(
+        0,
+        item.cost - components.reduce((n, i) => n + i.cost, 0),
+      );
+      components.forEach((i) => owned.delete(i.id));
+      const sell: number[] = [];
+      if (owned.size >= 12) {
+        const victim = [...owned].sort(
+          (a, b) => itemMap.get(a)!.cost - itemMap.get(b)!.cost || a - b,
+        )[0];
+        owned.delete(victim);
+        sell.push(victim);
+      }
+      total += cost;
+      spent[item.item_slot_type] += cost;
+      bought.add(item.id);
+      owned.add(item.id);
+      phaseIndex = Math.max(
+        phaseIndex,
+        purchaseTime(item) <= 600 ? 0 : purchaseTime(item) <= 1200 ? 1 : 2,
+      );
+      buys.push({
+        itemId: item.id,
+        phase: phaseNames[phaseIndex],
+        cost,
+        total,
+        score: choice.score,
+        winRate: choice.win,
+        usage: choice.usage,
+        upgradesFrom: components.map((i) => i.id),
+        sell,
+        reason: `${Math.round(choice.usage * 100)}% cohort purchase rate · ${item.is_active_item ? "active utility" : "passive value"}${components.length ? " · component upgrade" : ""}`,
+      });
+    }
     return {
       cohort: useHighSkill ? "Ascendant+" : "All skill levels",
       cohortMatches: analytics.heroMatches,
@@ -377,6 +378,7 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
       items: buys,
       abilityOrder: path.steps,
       abilityEvidence: path.evidence,
+      abilityCohort,
       abilityFallback: path.fallback,
       total,
       kitNote: p.onHit

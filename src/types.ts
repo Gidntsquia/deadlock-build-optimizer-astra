@@ -116,6 +116,7 @@ export interface Build {
   items: Buy[];
   abilityOrder: AbilityStep[];
   abilityEvidence: number;
+  abilityCohort: string;
   abilityFallback: boolean;
   total: number;
   kitNote: string;

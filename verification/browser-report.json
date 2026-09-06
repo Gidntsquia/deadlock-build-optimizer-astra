@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-06T06:29:42.000Z",
+  "testedAt": "2026-09-06T06:40:29.140Z",
   "viewport": "390×844",
   "productionBuild": true,
   "externalNetwork": "blocked",
@@ -8,7 +8,7 @@
   "heroesTested": 38,
   "buildsPerHero": 1,
   "viewsPerBuild": 3,
-  "detailCardsVerified": 15,
+  "detailCardsVerified": 22,
   "keyboardEscapeAndFocus": true,
   "horizontalOverflow": false,
   "tapTargetsAtLeast40px": true

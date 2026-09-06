@@ -88,6 +88,63 @@ async function pool(values, fn, n = 3) {
   );
 }
 const api = "https://api.deadlock-api.com";
+// Refresh expert evidence against the existing window without replacing assets or player samples.
+if (process.argv.includes("--expert-only")) {
+  const load = async (name) =>
+    JSON.parse(await readFile(path.join(DATA, name + ".json"), "utf8"));
+  const [manifest, heroes, analytics] = await Promise.all(
+    ["manifest", "heroes", "analytics"].map(load),
+  );
+  const denominatorQuery = new URLSearchParams({
+    min_average_badge: "100",
+    game_mode: "normal",
+    match_mode: "ranked,unranked",
+    min_unix_timestamp: String(manifest.aggregateWindow.start),
+    max_unix_timestamp: String(manifest.aggregateWindow.endExclusive - 1),
+  });
+  const denominators = await request(
+    `${api}/v1/analytics/hero-stats?${denominatorQuery}`,
+  );
+  await pool(heroes, async (h) => {
+    const matches = denominators.find((s) => s.hero_id === h.id)?.matches || 0;
+    if (matches < 200) {
+      delete analytics[h.id].highSkill;
+      return;
+    }
+    const q = new URLSearchParams({
+      hero_id: String(h.id),
+      game_mode: "normal",
+      match_mode: "ranked,unranked",
+      min_unix_timestamp: String(manifest.aggregateWindow.start),
+      max_unix_timestamp: String(manifest.aggregateWindow.endExclusive - 1),
+      min_matches: "5",
+      min_average_badge: "100",
+    });
+    const itemStats = await request(`${api}/v1/analytics/item-stats?${q}`);
+    const abilityOrders = await request(
+      `${api}/v1/analytics/ability-order-stats?${q}&min_ability_upgrades=16&max_ability_upgrades=16`,
+    );
+    const permutations = await request(
+      `${api}/v1/analytics/item-permutation-stats?${q}&comb_size=2`,
+    );
+    analytics[h.id].highSkill = {
+      heroMatches: matches,
+      itemStats,
+      abilityOrders,
+      permutations,
+    };
+    console.log(
+      `Expert ${h.name}: ${matches} matches, ${itemStats.length} items, ${abilityOrders.length} ability paths`,
+    );
+  });
+  await save(path.join(DATA, "analytics.json"), analytics);
+  await save(path.join(DATA, "high-skill-hero-stats.json"), denominators);
+  manifest.expertRefreshedAt = new Date().toISOString();
+  manifest.sources = [...new Set([...manifest.sources, ...sources])].sort();
+  await save(path.join(DATA, "manifest.json"), manifest);
+  process.exit(0);
+}
+
 const [allHeroes, allItems] = await Promise.all([
   request(api + "/v1/assets/heroes"),
   request(api + "/v1/assets/items"),
@@ -153,8 +210,10 @@ await pool(heroes, async (h) => {
   analytics[h.id] = { heroMatches, itemStats, abilityOrders, permutations };
   const highMatches =
     highSkillHeroStats.find((s) => s.hero_id === h.id)?.matches || 0;
-  if (highMatches >= 1000) {
-    const eliteQuery = `${q}&min_average_badge=100`;
+  if (highMatches >= 200) {
+    const eliteParams = new URLSearchParams(q);
+    eliteParams.set("min_matches", "5");
+    const eliteQuery = `${eliteParams}&min_average_badge=100`;
     const highItems = await request(
       `${api}/v1/analytics/item-stats?${eliteQuery}`,
     );
