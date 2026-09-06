@@ -1,26 +1,17 @@
 {
-  "evaluatedAt": "2026-09-06T06:05:06.617Z",
-  "generatorSha256": "e5ba913eb8ddc757b740e494e1cefcbbcc320b7a9a3a6aecc9275c6009a5f905",
+  "evaluatedAt": "2026-09-06T06:30:09.194Z",
+  "generatorSha256": "0024c9af41b1893178064b403099a31352ca81b088799e52845e3932a9e80e1c",
   "sampleSize": 30,
   "rule": "Unweighted frequency >=30%; wins weighted 1.5x in overlap and timing; experiments excluded",
   "reports": [
     {
-      "name": "Afterburn engine",
-      "agreement": 35,
-      "overlap": 0.1845360824742268,
-      "order": 0.7333333333333333,
-      "shared": 6,
+      "name": "Infernus consensus",
+      "agreement": 45,
+      "overlap": 0.2999410724808486,
+      "order": 0.8055555555555556,
+      "shared": 9,
       "coreCount": 24,
-      "pairs": 15
-    },
-    {
-      "name": "Bullet pressure",
-      "agreement": 34,
-      "overlap": 0.06316254416961131,
-      "order": 1,
-      "shared": 2,
-      "coreCount": 24,
-      "pairs": 1
+      "pairs": 36
     }
   ],
   "core": [

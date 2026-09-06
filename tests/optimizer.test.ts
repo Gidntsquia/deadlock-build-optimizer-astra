@@ -29,6 +29,44 @@ const data: AggregateData = {
 const manifest: Manifest = read("manifest"),
   matches: ValidationMatch[] = read("zergggy-matches");
 
+test("consensus follows common purchases and observed timing without category quotas", () => {
+  const preferred = data.items
+    .filter(
+      (i) => i.shopable && i.item_tier === 1 && i.item_slot_type === "spirit",
+    )
+    .slice(0, 5);
+  assert.equal(preferred.length, 5);
+  const population = data.analytics[1];
+  const input: AggregateData = {
+    ...data,
+    analytics: {
+      ...data.analytics,
+      1: {
+        ...population,
+        highSkill: undefined,
+        heroMatches: 10000,
+        itemStats: data.items
+          .filter((i) => i.shopable)
+          .map((i) => {
+            const index = preferred.findIndex((p) => p.id === i.id);
+            const count = index >= 0 ? 9000 : 20;
+            return {
+              item_id: i.id,
+              matches: count,
+              wins: count / 2,
+              avg_buy_time_s: index >= 0 ? 500 - index * 50 : 900,
+            };
+          }),
+      },
+    },
+  };
+  const build = generateBuilds(input, 1)[0];
+  assert.deepEqual(
+    build.items.filter((b) => b.phase === "Early").map((b) => b.itemId),
+    preferred.toReversed().map((i) => i.id),
+  );
+});
+
 test("sparse expert cohorts fall back without mixing population denominators", () => {
   const population = { ...data.analytics[1], highSkill: undefined };
   const buildWith = (heroMatches: number, rows: number) =>
@@ -88,7 +126,7 @@ test("strict >=200 shopable criterion is transparently reported, never faked", (
     );
   } else assert.ok(manifest.shopableItems >= 200);
 });
-test("every hero deterministically generates distinct legal 15-purchase plans", () => {
+test("every hero deterministically generates one legal 15-purchase plan", () => {
   assert.ok(
     Math.abs(Object.values(WEIGHTS).reduce((a, b) => a + b, 0) - 1) < 1e-12,
   );
@@ -96,12 +134,8 @@ test("every hero deterministically generates distinct legal 15-purchase plans", 
     hashes: Record<number, string> = {};
   for (const hero of data.heroes) {
     const builds = generateBuilds(data, hero.id);
-    assert.equal(builds.length, 2);
+    assert.equal(builds.length, 1);
     assert.deepEqual(builds, generateBuilds(data, hero.id));
-    assert.notDeepEqual(
-      builds[0].items.map((i) => i.itemId),
-      builds[1].items.map((i) => i.itemId),
-    );
     hashes[hero.id] = createHash("sha256")
       .update(JSON.stringify(builds))
       .digest("hex");

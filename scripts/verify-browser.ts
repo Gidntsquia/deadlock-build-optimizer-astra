@@ -99,6 +99,12 @@ try {
     page.getByRole("heading", { name: "Infernus", exact: true }),
   ).toBeVisible();
   await expect(page.locator(".item-row")).toHaveCount(15);
+  await expect(
+    page.locator(".build-option, .personal-note, .stretch"),
+  ).toHaveCount(0);
+  await expect(page.locator(".consensus-heading")).toContainText(
+    "Recommended build",
+  );
   await layout();
   await page.screenshot({ path: "verification/mobile-first-screen.png" });
   await page.screenshot({
@@ -107,8 +113,7 @@ try {
   });
   const infernus = generateBuilds(data, 1);
   let dialogs = 0;
-  for (let index = 0; index < 2; index++) {
-    await page.locator(".build-option").nth(index).click();
+  for (let index = 0; index < 1; index++) {
     for (const buy of infernus[index].items) {
       const item = data.items.find((i) => i.id === buy.itemId)!;
       const row = page.locator(`[data-item-id="${item.id}"]`);
@@ -178,14 +183,13 @@ try {
     path: "verification/mobile-validation.png",
     fullPage: true,
   });
-  // All active heroes, both approaches, all three views. This exceeds the three-hero criterion.
+  // All active heroes, one consensus build, all three views. This exceeds the three-hero criterion.
   for (const hero of data.heroes) {
     await page.getByLabel("Select hero").selectOption(String(hero.id));
     await expect(
       page.getByRole("heading", { name: hero.name, exact: true }),
     ).toBeVisible();
-    for (let index = 0; index < 2; index++) {
-      await page.locator(".build-option").nth(index).click();
+    for (let index = 0; index < 1; index++) {
       await page.getByRole("button", { name: "Items", exact: true }).click();
       await expect(page.locator(".item-row")).toHaveCount(15);
       await layout();
@@ -232,7 +236,7 @@ try {
     externalRequests: external,
     consoleErrors: errors,
     heroesTested: data.heroes.length,
-    buildsPerHero: 2,
+    buildsPerHero: 1,
     viewsPerBuild: 3,
     detailCardsVerified: dialogs,
     keyboardEscapeAndFocus: true,

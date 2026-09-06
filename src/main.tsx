@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { flushSync } from "react-dom";
 import { AbilityTimeline } from "./AbilityTimeline";
 import {
-  Flame,
   Crosshair,
   ArrowUpRight,
   Check,
@@ -11,7 +10,6 @@ import {
   ChevronRight,
   X,
   Layers,
-  Clock3,
   ShieldCheck,
   Activity,
   ArrowRight,
@@ -20,7 +18,6 @@ import {
 } from "lucide-react";
 import { generateBuilds } from "./generator";
 import { computeCore, loadValidation, validateBuild } from "./validation";
-import { personalInsight } from "./personalization";
 import { statLines, descriptions } from "./assetText";
 import type {
   AggregateData,
@@ -28,18 +25,15 @@ import type {
   Build,
   Buy,
   Manifest,
-  PersonalMatch,
   ValidationMatch,
 } from "./types";
 import "./style.css";
 import "./shop.css";
 const base = import.meta.env.BASE_URL;
 const souls = (n: number) => n.toLocaleString("en-US");
-const compact = (n: number) => `${(n / 1000).toFixed(1)}k`;
 interface Data extends AggregateData {
   images: Record<string, string>;
   manifest: Manifest;
-  personal: PersonalMatch[];
   validation: ValidationMatch[];
 }
 async function read<T>(name: string): Promise<T> {
@@ -49,29 +43,20 @@ async function read<T>(name: string): Promise<T> {
   return res.json();
 }
 async function load(): Promise<Data> {
-  const [
-    heroes,
-    items,
-    abilities,
-    weapons,
-    analytics,
-    images,
-    manifest,
-    personal,
-  ] = await Promise.all([
-    read<Data["heroes"]>("heroes"),
-    read<Data["items"]>("items"),
-    read<Data["abilities"]>("abilities"),
-    read<Data["weapons"]>("weapons"),
-    read<Data["analytics"]>("analytics"),
-    read<Data["images"]>("images"),
-    read<Manifest>("manifest"),
-    read<PersonalMatch[]>("personal-history"),
-  ]);
+  const [heroes, items, abilities, weapons, analytics, images, manifest] =
+    await Promise.all([
+      read<Data["heroes"]>("heroes"),
+      read<Data["items"]>("items"),
+      read<Data["abilities"]>("abilities"),
+      read<Data["weapons"]>("weapons"),
+      read<Data["analytics"]>("analytics"),
+      read<Data["images"]>("images"),
+      read<Manifest>("manifest"),
+    ]);
   const aggregate = { heroes, items, abilities, weapons, analytics };
   generateBuilds(aggregate, 1); // Complete generation before opening the held-out snapshot.
   const validation = await loadValidation(base);
-  return { ...aggregate, images, manifest, personal, validation };
+  return { ...aggregate, images, manifest, validation };
 }
 function Root() {
   const [data, setData] = useState<Data | null>(null),
@@ -94,19 +79,17 @@ function Root() {
 }
 function App({ data }: { data: Data }) {
   const [heroId, setHeroId] = useState(1),
-    [buildIndex, setBuildIndex] = useState(0),
     [tab, setTab] = useState("Items"),
     [detail, setDetail] = useState<Buy | null>(null);
   const hero = data.heroes.find((h) => h.id === heroId)!,
     builds = useMemo(() => generateBuilds(data, heroId), [data, heroId]),
-    build = builds[buildIndex];
-  const core = useMemo(() => computeCore(data.validation), [data]),
-    insight = useMemo(() => personalInsight(data.personal), [data]);
+    build = builds[0];
+  const core = useMemo(() => computeCore(data.validation), [data]);
   const reports = useMemo(
     () => builds.map((b) => validateBuild(b, core)),
     [builds, core],
   );
-  const report = reports[buildIndex];
+  const report = reports[0];
   const itemMap = useMemo(
     () => new Map(data.items.map((i) => [i.id, i])),
     [data],
@@ -115,7 +98,6 @@ function App({ data }: { data: Data }) {
   const photo = (key: string) => base + data.images[key];
   const chooseHero = (id: number) => {
     setHeroId(id);
-    setBuildIndex(0);
     setDetail(null);
   };
   useEffect(() => {
@@ -144,32 +126,24 @@ function App({ data }: { data: Data }) {
           {
             name: "select_hero_build",
             description:
-              "Select an active Deadlock hero and build focus in the optimizer.",
+              "Select an active Deadlock hero and its consensus build.",
             inputSchema: {
               type: "object",
               properties: {
                 heroId: { type: "integer" },
-                focus: { type: "string", enum: ["spirit", "weapon"] },
               },
-              required: ["heroId", "focus"],
+              required: ["heroId"],
               additionalProperties: false,
             },
             annotations: { readOnlyHint: false, untrustedContentHint: false },
             execute(input) {
-              const x = input as { heroId: number; focus: string };
-              if (
-                !x ||
-                !data.heroes.some((h) => h.id === x.heroId) ||
-                !["spirit", "weapon"].includes(x.focus)
-              )
-                throw new Error(
-                  "Choose an active hero and spirit or weapon focus",
-                );
+              const x = input as { heroId: number };
+              if (!x || !data.heroes.some((h) => h.id === x.heroId))
+                throw new Error("Choose an active hero");
               flushSync(() => {
                 chooseHero(x.heroId);
-                setBuildIndex(x.focus === "spirit" ? 0 : 1);
               });
-              return { heroId: x.heroId, focus: x.focus };
+              return { heroId: x.heroId };
             },
           },
           { signal: lifecycle.signal },
@@ -222,31 +196,13 @@ function App({ data }: { data: Data }) {
           />
           <span className="hero-number">{String(heroId).padStart(2, "0")}</span>
         </section>
-        <div className="section-heading">
-          <h2>Choose your approach</h2>
-          <span>02 BUILDS</span>
-        </div>
-        <div className="build-picker" aria-label="Build selection">
-          {builds.map((b, i) => (
-            <button
-              key={b.id}
-              className={`build-option ${i === buildIndex ? "selected" : ""}`}
-              aria-pressed={i === buildIndex}
-              onClick={() => setBuildIndex(i)}
-            >
-              {i === 0 ? <Flame size={21} /> : <Crosshair size={21} />}
-              <strong>{b.name}</strong>
-              <span>{i === 0 ? "SPIRIT FOCUS" : "WEAPON FOCUS"}</span>
-              <span className="build-agreement">
-                {heroId === 1
-                  ? `${reports[i].agreement}% agreement`
-                  : "Infernus validation only"}
-              </span>
-              {i === buildIndex && (
-                <Check className="selected-check" size={16} />
-              )}
-            </button>
-          ))}
+        <div className="section-heading consensus-heading">
+          <h2>Recommended build</h2>
+          <span className="build-agreement">
+            {heroId === 1
+              ? `${report.agreement}% agreement`
+              : "AGGREGATE CONSENSUS"}
+          </span>
         </div>
         <div className="build-summary">
           <span>
@@ -255,24 +211,6 @@ function App({ data }: { data: Data }) {
           </span>
           <span className="soul-color">◈ {souls(build.total)} souls</span>
           <span>3 phases</span>
-        </div>
-        <div className="personal-note">
-          <Clock3 size={18} />
-          <p>
-            {insight.count ? (
-              <>
-                <strong>Your games run ~{insight.minutes} min.</strong>{" "}
-                Purchases past your {compact(insight.budget)} median net worth
-                are marked “stretch”.{" "}
-                <span>Last {insight.count} standard matches.</span>
-              </>
-            ) : (
-              <>
-                No eligible personal matches in this snapshot. Use the phase
-                plan as a general guide.
-              </>
-            )}
-          </p>
         </div>
         <nav className="tabs" aria-label="Build view">
           {["Items", "Abilities", "Validation"].map((t) => (
@@ -374,10 +312,6 @@ function App({ data }: { data: Data }) {
                               {b.upgradesFrom.length > 0 && (
                                 <span>Upgrade</span>
                               )}
-                              {insight.count > 0 &&
-                                b.total > insight.budget && (
-                                  <span className="stretch">Stretch</span>
-                                )}
                             </div>
                             {b.sell.length > 0 && (
                               <small>
@@ -443,7 +377,7 @@ function App({ data }: { data: Data }) {
             <p className="explanation">
               {build.abilityFallback
                 ? "No complete aggregate order met the sample threshold. This is a legal, balanced fallback."
-                : `Selected from complete aggregate paths · ${souls(build.abilityEvidence)} matches. Both builds share this evidence-based path.`}{" "}
+                : `Selected from complete aggregate paths · ${souls(build.abilityEvidence)} matches.`}{" "}
               Levels follow the hero’s soul and ability-point thresholds.
             </p>
             <details className="ability-order-details">
@@ -476,7 +410,7 @@ function App({ data }: { data: Data }) {
             <div className="view-intro">
               <div>
                 <h2>How did the generator do?</h2>
-                <p>An independent check against Zergggy.</p>
+                <p>Comparison against Zergggy’s recorded matches.</p>
               </div>
               <ShieldCheck size={26} />
             </div>
@@ -485,7 +419,7 @@ function App({ data }: { data: Data }) {
                 <ShieldCheck size={32} />
                 <h3>Infernus is the test case</h3>
                 <p>
-                  These {hero.name} builds use this hero’s aggregate analytics.
+                  This {hero.name} build uses this hero’s aggregate analytics.
                   Zergggy’s Infernus data cannot validate another hero.
                 </p>
                 <button
@@ -549,8 +483,9 @@ function App({ data }: { data: Data }) {
                   </p>
                   <p>
                     Overall = 70% weighted item overlap + 30% pairwise buy-order
-                    agreement. Missing order evidence contributes zero. No
-                    scoring weights were tuned to this result.
+                    agreement. Missing order evidence contributes zero. The
+                    generator uses aggregate data only. This reused sample is a
+                    development benchmark, not a fresh independent test.
                   </p>
                 </div>
                 <h3 className="list-title">

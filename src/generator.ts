@@ -12,13 +12,13 @@ import type {
 
 // Fixed, a priori weights. No player history or evaluation result enters this module.
 export const WEIGHTS = Object.freeze({
-  win: 0.3,
-  usage: 0.2,
-  value: 0.15,
-  synergy: 0.15,
-  effect: 0.05,
-  phase: 0.05,
-  investment: 0.05,
+  win: 0.15,
+  usage: 0.55,
+  value: 0.05,
+  synergy: 0.05,
+  effect: 0.025,
+  phase: 0.1,
+  investment: 0.025,
   pair: 0.05,
 });
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
@@ -186,7 +186,13 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
     analytics.permutations.map((s) => [s.item_ids.join(","), s]),
   );
   const path = abilityPath(hero, data.abilities, analytics);
-  return (["spirit", "weapon"] as Slot[]).map((focus) => {
+  const offensiveUsage = (slot: Slot) =>
+    pool
+      .filter((i) => i.item_slot_type === slot)
+      .reduce((sum, i) => sum + (statMap.get(i.id)?.matches || 0), 0);
+  const focus: Slot =
+    offensiveUsage("spirit") >= offensiveUsage("weapon") ? "spirit" : "weapon";
+  return [focus].map((focus) => {
     const featureMap = new Map(pool.map((i) => [i.id, features(i, p, focus)]));
     const maxValues = Object.fromEntries(
       [1, 2, 3, 4].map((t) => [
@@ -214,19 +220,19 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
         name: "Early",
         tiers: [1],
         time: 240,
-        slots: [focus, "vitality", focus, null, null],
+        slots: [null, null, null, null, null],
       },
       {
         name: "Mid",
         tiers: [2, 3],
         time: 900,
-        slots: [focus, "vitality", focus, null, null],
+        slots: [null, null, null, null, null],
       },
       {
         name: "Late",
         tiers: [3, 4],
         time: 1680,
-        slots: [focus, "vitality", focus, null, null],
+        slots: [null, null, null, null, null],
       },
     ];
     const ancestors = (i: Asset): Asset[] =>
@@ -235,7 +241,7 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
         return a ? [a, ...ancestors(a)] : [];
       });
     for (const phase of phases)
-      for (const slot of phase.slots) {
+      for (const [position, slot] of phase.slots.entries()) {
         function evaluate(item: Asset) {
           const s = statMap.get(item.id),
             f = featureMap.get(item.id)!;
@@ -278,7 +284,7 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
             : 0.2;
           const score =
             WEIGHTS.win * win +
-            (WEIGHTS.usage * Math.log1p(100 * usage)) / Math.log(101) +
+            WEIGHTS.usage * usage +
             (WEIGHTS.value * f.value) / maxValues[item.item_tier] +
             WEIGHTS.synergy * f.synergy +
             WEIGHTS.effect * f.effect +
@@ -309,7 +315,24 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
           throw new Error(
             `Not enough legal ${phase.name} ${slot || ""} items for ${hero.name}`,
           );
-        const choice = ranked[0],
+        // Schedule the strongest remaining purchases by observed timing. A
+        // component must precede its upgrade even when aggregate times disagree.
+        const shortlist = ranked.slice(0, phase.slots.length - position);
+        const scheduled = shortlist
+          .filter(
+            (candidate) =>
+              !ancestors(candidate.item).some((a) =>
+                shortlist.some((other) => other.item.id === a.id),
+              ),
+          )
+          .sort(
+            (a, b) =>
+              (statMap.get(a.item.id)?.avg_buy_time_s ?? phase.time) -
+                (statMap.get(b.item.id)?.avg_buy_time_s ?? phase.time) ||
+              b.score - a.score ||
+              a.item.id - b.item.id,
+          );
+        const choice = scheduled[0],
           item = choice.item;
         const components = ancestors(item).filter((i) => owned.has(i.id));
         // An owned upgrade already includes its own component cost; don't double-credit ancestors.
@@ -340,23 +363,16 @@ export function generateBuilds(data: AggregateData, heroId: number): Build[] {
           usage: choice.usage,
           upgradesFrom: components.map((i) => i.id),
           sell,
-          reason: `${item.item_slot_type === focus ? "Build focus" : "Balanced support"} · ${item.is_active_item ? "active utility" : "passive value"}${components.length ? " · component upgrade" : ""}`,
+          reason: `${Math.round(choice.usage * 100)}% cohort purchase rate · ${item.is_active_item ? "active utility" : "passive value"}${components.length ? " · component upgrade" : ""}`,
         });
       }
     return {
       cohort: useHighSkill ? "Ascendant+" : "All skill levels",
       cohortMatches: analytics.heroMatches,
       id: focus,
-      name:
-        focus === "spirit"
-          ? p.onHit
-            ? "Afterburn engine"
-            : "Spirit surge"
-          : "Bullet pressure",
+      name: `${hero.name} consensus`,
       subtitle:
-        focus === "spirit"
-          ? "Sustained spirit damage & survivability"
-          : "Weapon damage & sustained fire",
+        "A single purchase plan built around this hero’s most-used items",
       focus,
       items: buys,
       abilityOrder: path.steps,
