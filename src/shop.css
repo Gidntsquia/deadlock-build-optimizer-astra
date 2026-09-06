@@ -31,7 +31,7 @@ main {
   padding: 16px 18px 0;
 }
 .hero-panel {
-  min-height: 166px;
+  min-height: 138px;
   background: #273b3d;
   border: 1px solid #657977;
   border-radius: 5px;
@@ -44,9 +44,10 @@ main {
   font-weight: 600;
   letter-spacing: 0;
   color: #c9e8e5;
+  display: none;
 }
 h1 {
-  font-size: 43px;
+  font-size: 36px;
   font-style: normal;
   margin: 4px 0 6px;
   letter-spacing: -1px;
@@ -54,6 +55,7 @@ h1 {
 .hero-copy p {
   font-size: 12px;
   color: #d1dbd0;
+  display: none;
 }
 .hero-art {
   right: -12px;
@@ -82,7 +84,7 @@ h1 {
   gap: 9px;
 }
 .build-option {
-  min-height: 104px;
+  min-height: 80px;
   padding: 13px;
   gap: 6px;
   background: #273130;
@@ -154,7 +156,7 @@ h1 {
 }
 .view-intro .cohort-caption {
   color: #a9ccca;
-  margin-top: 5px;
+  margin-top: 3px;
   font-size: 11px;
 }
 .focus-badge {
@@ -301,12 +303,12 @@ h1 {
   line-height: 17px;
 }
 .shop-card .item-main {
-  padding: 7px 4px 5px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  min-height: 65px;
+  min-height: 50px;
   background: linear-gradient(#ffffff1a, #fff0);
 }
 .shop-card .item-main > strong {
@@ -324,7 +326,7 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 2px 4px;
-  margin-top: 5px;
+  margin-top: 3px;
   color: var(--card-ink);
   font-size: 10px;
 }
@@ -346,7 +348,7 @@ h1 {
 }
 .shop-card .item-cost {
   text-align: center;
-  padding: 6px 3px 7px;
+  padding: 4px 3px;
   border-top: 1px solid #4c403d26;
   background: #252b2520;
 }
@@ -456,6 +458,25 @@ h1 {
   font-size: 11px;
   font-style: normal;
 }
+.point-marker .point-diamond {
+  width: 9px;
+  height: 9px;
+  border: 2px solid currentColor;
+  transform: rotate(45deg);
+  font-size: 0;
+  margin: 0 3px;
+}
+.point-unlock .point-diamond {
+  background: currentColor;
+}
+.point-unlock .point-diamond::after {
+  content: "";
+  display: block;
+  width: 2px;
+  height: 5px;
+  background: #243047;
+  transform: rotate(-25deg) translate(1px, 0);
+}
 .point-unlock {
   color: #d892ff;
 }
@@ -494,7 +515,52 @@ h1 {
   min-width: 0;
 }
 .ability-key img {
-  filter: grayscale(1);
+  filter: brightness(0);
+  background: transparent;
+  border: 0;
+  margin: 0;
+}
+.ability-icon-tile {
+  width: 52px;
+  height: 52px;
+  background: #f0e4c9;
+  border-radius: 3px;
+  margin: 0 auto 10px;
+}
+.shop-view {
+  background: #92856b;
+  border: 1px solid #b2a184;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 16px;
+}
+.shop-view .view-intro {
+  margin: 0 0 12px;
+  padding: 13px 12px;
+  background: #68adba;
+  color: #182e32;
+}
+.shop-view .view-intro h2 {
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 700;
+}
+.shop-view .view-intro p,
+.shop-view .view-intro .cohort-caption {
+  color: #203b40;
+}
+.shop-view .phase {
+  margin: 0 9px 12px;
+  border-color: #6d6048;
+  box-shadow: none;
+}
+.shop-view > .fine-print,
+.shop-view > .kit-note {
+  margin: 12px;
+  color: #241f18;
+}
+.shop-view > .kit-note p {
+  color: #241f18;
 }
 .ability-key strong {
   color: #e7e0d1;
@@ -588,16 +654,16 @@ footer {
     bottom: -21px;
   }
   h1 {
-    font-size: 38px;
+    font-size: 34px;
   }
   .hero-copy p {
     max-width: 195px;
   }
   .hero-panel {
-    min-height: 166px;
+    min-height: 138px;
   }
   .build-option {
-    min-height: 96px;
+    min-height: 80px;
     padding: 12px 10px;
   }
   .build-option strong {

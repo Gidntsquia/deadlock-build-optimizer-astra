@@ -297,10 +297,10 @@ function App({ data }: { data: Data }) {
           ))}
         </nav>
         {tab === "Items" && (
-          <section aria-label="Item build" className="view">
+          <section aria-label="Item build" className="view shop-view">
             <div className="view-intro">
               <div>
-                <h2>The buy order</h2>
+                <h2>{build.name}</h2>
                 <p>{build.subtitle}</p>
                 <p className="cohort-caption">
                   {build.cohort} · {souls(build.cohortMatches)} hero matches
@@ -431,7 +431,9 @@ function App({ data }: { data: Data }) {
                 )!;
                 return (
                   <div key={slot}>
-                    <img src={photo(`ability-${a.id}`)} alt="" />
+                    <div className="ability-icon-tile">
+                      <img src={photo(`ability-${a.id}`)} alt="" />
+                    </div>
                     <span>{slot}</span>
                     <strong>{a.name}</strong>
                   </div>
