@@ -63,7 +63,7 @@ test("consensus follows common purchases and observed timing without category qu
   const build = generateBuilds(input, 1)[0];
   assert.deepEqual(
     build.items.filter((b) => b.phase === "Early").map((b) => b.itemId),
-    preferred.toReversed().map((i) => i.id),
+    [...preferred].reverse().map((i) => i.id),
   );
 });
 
